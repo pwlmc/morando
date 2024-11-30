@@ -1,12 +1,5 @@
-
-
 function App() {
-
-  return (
-    <>
-      WIP
-    </>
-  )
+  return <>WIP</>;
 }
 
-export default App
+export default App;
