@@ -1,3 +1,3 @@
-# React Modular Architecture
+# Capsua
 
-TBA
+Modular Monolith Architecture for Component-Based Programming
