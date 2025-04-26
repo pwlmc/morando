@@ -5,9 +5,10 @@ import type * as Preset from "@docusaurus/preset-classic";
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const config: Config = {
-  title: "Capsua",
-  tagline: "Moduler Monolith Architecture for Component-Based Programming",
-  url: "https://capsua.dev",
+  title: "Spacious Architecture",
+  tagline:
+    "Modular Monolith Architecture for Component-Based and Reactive Front-End Apps",
+  url: "https://spacious-arch.dev",
   favicon: "img/favicon.ico",
 
   // Set the /<baseUrl>/ pathname under which your site is served
@@ -16,8 +17,8 @@ const config: Config = {
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: "facebook", // Usually your GitHub org/user name.
-  projectName: "docusaurus", // Usually your repo name.
+  organizationName: "spacious-arch", // Usually your GitHub org/user name.
+  projectName: "docs", // Usually your repo name.
 
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
@@ -52,7 +53,7 @@ const config: Config = {
     // Replace with your project's social card
     image: "img/docusaurus-social-card.jpg",
     navbar: {
-      title: "Capsua",
+      title: "Spacious",
       logo: {
         alt: "My Site Logo",
         src: "img/logo.svg",
