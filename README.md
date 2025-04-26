@@ -1,3 +1,3 @@
-# Capsua
+# Spacious Architecture
 
-Modular Monolith Architecture for Component-Based Programming
+Modular Monolith Architecture for Component-Based and Reactive Front-End Apps
