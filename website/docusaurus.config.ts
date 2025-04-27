@@ -56,7 +56,7 @@ const config: Config = {
       title: "Spacious",
       logo: {
         alt: "My Site Logo",
-        src: "img/logo.svg",
+        src: "img/spacious-logo.png",
       },
       items: [
         {
