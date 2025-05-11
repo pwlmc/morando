@@ -7,8 +7,8 @@ import type * as Preset from "@docusaurus/preset-classic";
 const config: Config = {
   title: "Spacious Architecture",
   tagline:
-    "Modular Monolith Architecture for Component-Based and Reactive Front-End Apps",
-  url: "https://spacious-arch.dev",
+    "Modular monolith design for Component-Based and Reactive front-end applications",
+  url: "https://fit-arch.dev",
   favicon: "img/favicon.ico",
 
   // Set the /<baseUrl>/ pathname under which your site is served
