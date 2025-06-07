@@ -2,7 +2,7 @@
 sidebar_position: 1
 ---
 
-# Why Spacious
+# Why Morando
 
 ## The problems
 
@@ -29,7 +29,7 @@ The key is a **flexible Module abstraction**.
 Instead of relying solely on rigid layers or informal coordinators, we organize code around Modules: independent, cohesive units that can contain logic, UI, state, and even other Modules.
 Modules provide a natural way to express boundaries, manage complexity recursively, and evolve the system without unnecessary coupling.
 
-With Modules as first-class citizens, **Spacious Architecture offers**:
+With Modules as first-class citizens, **Morando's Layered-Modular Monolith Architecture offers**:
 
 - A **clear vocabulary** for discussing system design.
 - An intuitive way to **measure and improve** architectural decisions (by looking at Module boundaries and dependencies).

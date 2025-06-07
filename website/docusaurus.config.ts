@@ -5,10 +5,9 @@ import type * as Preset from "@docusaurus/preset-classic";
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const config: Config = {
-  title: "Spacious Architecture",
-  tagline:
-    "Modular monolith design for Component-Based and Reactive front-end applications",
-  url: "https://fit-arch.dev",
+  title: "Morando",
+  tagline: "A Layered, Modular Monolith Architected for Scale.",
+  url: "https://morando.dev",
   favicon: "img/favicon.ico",
 
   // Set the /<baseUrl>/ pathname under which your site is served
@@ -17,8 +16,8 @@ const config: Config = {
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: "spacious-arch", // Usually your GitHub org/user name.
-  projectName: "docs", // Usually your repo name.
+  organizationName: "pwlmc", // Usually your GitHub org/user name.
+  projectName: "morando", // Usually your repo name.
 
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
@@ -53,7 +52,7 @@ const config: Config = {
     // Replace with your project's social card
     image: "img/docusaurus-social-card.jpg",
     navbar: {
-      title: "Spacious",
+      title: "Morando",
       logo: {
         alt: "My Site Logo",
         src: "img/spacious-logo.png",
