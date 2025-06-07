@@ -1,3 +1,3 @@
-# Spacious Architecture
+# Morando
 
-Modular Monolith Architecture for Component-Based and Reactive Front-End Apps
+The Toolkit for Layered, Modular, Scalable JS Projects.
