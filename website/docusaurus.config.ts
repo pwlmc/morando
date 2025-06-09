@@ -6,7 +6,7 @@ import type * as Preset from "@docusaurus/preset-classic";
 
 const config: Config = {
   title: "Morando",
-  tagline: "The Toolkit for Layered, Modular, Scalable JS Projects.",
+  tagline: "Architecture linter for the JavaScript ecosystem.",
   url: "https://morando.dev",
   favicon: "img/favicon.ico",
 

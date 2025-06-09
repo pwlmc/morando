@@ -1,0 +1,46 @@
+{
+  "name": "@morando/cli",
+  "version": "0.0.0",
+  "description": "Architecture linter for the JavaScript ecosystem.",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "test",
+    "build": "tsup src/index.ts --format cjs --dts --out-dir dist",
+    "dev": "tsup src/index.ts --format cjs --watch"
+  },
+  "bin": {
+    "morando": "./dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pwlmc/morando.git"
+  },
+  "keywords": [
+    "morando",
+    "cli",
+    "formatter",
+    "validator",
+    "linter",
+    "architecture"
+  ],
+  "author": "Paweł Maciejewski <pwlmaciejewski@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pwlmc/morando/issues"
+  },
+  "homepage": "https://github.com/pwlmc/morando#readme",
+  "dependencies": {
+    "cosmiconfig": "^9.0.0",
+    "ts-node": "^10.9.2",
+    "yargs": "^18.0.0"
+  },
+  "devDependencies": {
+    "@types/yargs": "^17.0.33",
+    "tsup": "^8.5.0"
+  }
+}
