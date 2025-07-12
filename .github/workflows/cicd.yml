@@ -1,0 +1,8 @@
+name: CI/CD
+
+on:
+  push:
+
+jobs:
+  website-cicd:
+    uses: ./.github/workflows/website_cicd.yml
