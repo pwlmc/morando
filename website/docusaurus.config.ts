@@ -78,8 +78,8 @@ const config: Config = {
           title: "Docs",
           items: [
             {
-              label: "Tutorial",
-              to: "/docs/intro",
+              label: "Getting started",
+              to: "/docs/getting-started",
             },
           ],
         },
@@ -97,19 +97,6 @@ const config: Config = {
             {
               label: "X",
               href: "https://x.com/docusaurus",
-            },
-          ],
-        },
-        {
-          title: "More",
-          items: [
-            {
-              label: "Blog",
-              to: "/blog",
-            },
-            {
-              label: "GitHub",
-              href: "https://github.com/facebook/docusaurus",
             },
           ],
         },
