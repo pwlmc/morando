@@ -1,8 +1,4 @@
 import { cosmiconfig, defaultLoaders } from "cosmiconfig";
-import { register } from "ts-node";
-import validateConfig from "./validateCOnfig";
-
-register({ transpileOnly: true });
 
 const explorer = cosmiconfig("morando", {
   loaders: {

@@ -6,3 +6,5 @@ on:
 jobs:
   website-cicd:
     uses: ./.github/workflows/website_cicd.yml
+  cli-cicd:
+    uses: ./.github/workflows/cli_cicd.yml
