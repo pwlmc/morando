@@ -1,1 +1,1 @@
-export type MorandoConfig = {};
+export const CONFIG_FILE_NAME = "morandorc.jsonc";
