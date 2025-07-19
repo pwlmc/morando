@@ -1,0 +1,129 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "$id": "https://morando.dev/configSchema.json",
+  "title": "Morando Configuration",
+  "description": "Configuration schema for Morando architecture linter",
+  "type": "object",
+  "properties": {
+    "extends": {
+      "description": "Path to another configuration file to extend from",
+      "anyOf": [
+        { "type": "string" },
+        { "type": "null" }
+      ]
+    },
+    "include": {
+      "description": "Array of glob patterns specifying which files to include in analysis",
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": ["src/**/*.{ts,tsx,js,jsx}"]
+    },
+    "exclude": {
+      "description": "Array of glob patterns specifying which files to exclude from analysis",
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": ["node_modules"]
+    },
+    "layers": {
+      "description": "Configuration for architectural layers and file matching rules",
+      "type": "object",
+      "properties": {
+        "list": {
+          "description": "Ordered list of layer names, from highest to lowest abstraction level",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-zA-Z][a-zA-Z0-9_-]*$"
+          },
+          "uniqueItems": true,
+          "minItems": 1
+        },
+        "default": {
+          "description": "Default layer for modules that don't match any specific layer matcher",
+          "type": "string"
+        },
+        "matchers": {
+          "description": "Array of rules to match files to specific layers",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "layer": {
+                "description": "The layer name this matcher assigns to matching files",
+                "type": "string"
+              },
+              "matcher": {
+                "description": "Type of matcher to use",
+                "type": "string",
+                "enum": ["glob"],
+                "default": "glob"
+              },
+              "pattern": {
+                "description": "Pattern to match file paths against",
+                "type": "string"
+              }
+            },
+            "required": ["layer", "pattern"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "modules": {
+      "description": "Configuration for module-specific rules and boundaries",
+      "type": "object",
+      "properties": {
+        "allowCircularDependencies": {
+          "description": "Whether to allow circular dependencies between modules",
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+  "examples": [
+    {
+      "extends": null,
+      "include": ["src/**/*.{ts,tsx}"],
+      "exclude": ["node_modules"]
+    },
+    {
+      "extends": "./defaultConfig.jsonc",
+      "layers": {
+        "list": ["pages", "components", "hooks", "business", "utils", "model"],
+        "default": "business",
+        "matchers": [
+          {
+            "layer": "pages",
+            "matcher": "glob",
+            "pattern": "/**/*Page.tsx"
+          },
+          {
+            "layer": "components",
+            "matcher": "glob",
+            "pattern": "**/components/**/*.tsx"
+          },
+          {
+            "layer": "hooks",
+            "pattern": "**/use[A-Z]*.{ts,tsx}"
+          },
+          {
+            "layer": "utils",
+            "matcher": "glob",
+            "pattern": "**/utils/**/[a-z]*.ts"
+          }
+        ]
+      }
+    },
+    {
+      "extends": "@morando/cli/src/config/reactSpaTemplate.jsonc"
+    }
+  ]
+}
