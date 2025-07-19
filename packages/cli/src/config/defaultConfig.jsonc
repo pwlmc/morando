@@ -1,5 +1,5 @@
 {
   "extends": null,
-  "include": ["src/**/*.{ts,tsx}"],
+  "include": ["src/**/*.{ts,tsx,js,jsx}"],
   "exclude": ["node_modules"]
 }
