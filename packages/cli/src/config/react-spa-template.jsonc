@@ -1,5 +1,12 @@
 {
-  "layers": ["definitions", "behaviors", "hooks", "components", "pages", "main"],
+  "layers": [
+    "definitions",
+    "behaviors",
+    "hooks",
+    "components",
+    "pages",
+    "main"
+  ],
   "layerMatchers": [
     {
       "layer": "definitions",
@@ -20,7 +27,7 @@
     {
       "layer": "components",
       "pattern": "**/*.tsx"
-    },  
+    },
     {
       "layer": "main",
       "pattern": "**/Main/**/*.ts"
@@ -28,6 +35,6 @@
     {
       "layer": "behaviors",
       "pattern": "**/*.ts"
-    },
+    }
   ]
 }
