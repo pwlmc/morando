@@ -7,11 +7,11 @@
     "lint": "oxlint",
     "typecheck": "tsc --noEmit",
     "test": "echo 'No tests specified' && exit 0",
-    "build": "tsup src/index.ts --format cjs --dts --out-dir dist",
-    "dev": "tsup src/index.ts --format cjs --watch"
+    "build": "tsup src/index.ts --format esm --dts",
+    "dev": "tsup src/index.ts --format esm --watch"
   },
   "bin": {
-    "morando": "./dist/index.js"
+    "morando": "./dist/index.mjs"
   },
   "files": [
     "dist",
