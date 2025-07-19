@@ -1,3 +1,0 @@
-{
-  "extends": "@morando/cli/src/config/reactSpaTemplate.jsonc"
-}

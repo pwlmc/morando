@@ -1,5 +1,4 @@
 {
-  "extends": "./defaultConfig.jsonc",
   "layers": {
     "list": ["pages", "components", "hooks", "business", "utils", "model"],
     "default": "business",

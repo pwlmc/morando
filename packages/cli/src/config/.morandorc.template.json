@@ -1,0 +1,3 @@
+{
+  "extends": "@morando/cli/src/config/react-spa-template.json"
+}
