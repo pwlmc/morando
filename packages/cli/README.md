@@ -1,3 +1,9 @@
 # Morando CLI
 
-> Architecture linter for the JavaScript ecosystem.
+> Morando architecture analysis tool
+
+## Installation
+
+```sh
+npm i --save-dev morando-cli
+```

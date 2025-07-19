@@ -1,4 +1,0 @@
-{
-  "includes": ["src/**/*.{ts,tsx,js,jsx}"],
-  "ignores": ["**/node_modules"]
-}

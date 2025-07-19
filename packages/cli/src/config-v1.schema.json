@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "$id": "https://morando.dev/config-schema.json",
+  "title": "Morando Configuration",
+  "description": "Configuration schema for Morando architecture analysis tool",
+  "type": "object",
+  "properties": {
+    "includes": {
+      "description": "Array of glob patterns for files to include in analysis",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "ignores": {
+      "description": "Array of glob patterns for files to exclude from analysis",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "layers": {
+      "description": "Ordered list of layer names, from highest to lowest abstraction level",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-zA-Z][a-zA-Z0-9_-]*$"
+      },
+      "uniqueItems": true,
+      "minItems": 1
+    },
+    "layerMatchers": {
+      "description": "Array of rules to match files to specific layers",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "layer": {
+            "description": "The layer name this matcher assigns to matching files",
+            "type": "string"
+          },
+          "pattern": {
+            "description": "Glob pattern to match file paths against",
+            "type": "string"
+          }
+        },
+        "required": ["layer", "pattern"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

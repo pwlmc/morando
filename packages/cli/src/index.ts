@@ -2,16 +2,16 @@
 
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
-import { CONFIG_FILE_NAME } from "./config/model";
 import { copyFile } from "fs/promises";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
-import readConfig from "./config/readConfig";
 import {
+  CONFIG_FILE_NAME,
+  readConfig,
   MissingConfigError,
   MalformedConfigError,
   InvalidConfigError,
-} from "./config/errors";
+} from "./config";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

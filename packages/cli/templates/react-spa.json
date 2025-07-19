@@ -1,5 +1,14 @@
 {
-  "layers": ["definitions", "behaviors", "hooks", "components", "pages", "main"],
+  "includes": ["src/**/*.{ts,tsx,js,jsx}"],
+  "ignores": ["**/node_modules"],
+  "layers": [
+    "definitions",
+    "behaviors",
+    "hooks",
+    "components",
+    "pages",
+    "main"
+  ],
   "layerMatchers": [
     {
       "layer": "definitions",
@@ -20,7 +29,7 @@
     {
       "layer": "components",
       "pattern": "**/*.tsx"
-    },  
+    },
     {
       "layer": "main",
       "pattern": "**/Main/**/*.ts"
@@ -28,6 +37,6 @@
     {
       "layer": "behaviors",
       "pattern": "**/*.ts"
-    },
+    }
   ]
 }
