@@ -1,0 +1,24 @@
+{
+  "layers": {
+    "list": ["pages", "components", "hooks", "business", "utils", "model"],
+    "default": "business",
+    "matchers": [
+      {
+        "layer": "pages",
+        "pattern": "/**/*Page.tsx"
+      },
+      {
+        "layer": "components",
+        "pattern": "**/components/**/*.tsx"
+      },
+      {
+        "layer": "hooks",
+        "pattern": "**/use[A-Z]*.{ts,tsx}"
+      },
+      {
+        "layer": "utils",
+        "pattern": "**/utils/**/[a-z]*.ts}"
+      }
+    ]
+  }
+}

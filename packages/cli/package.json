@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "oxlint",
     "typecheck": "tsc --noEmit",
-    "test": "echo 'No tests specified' && exit 0",
+    "test": "vitest",
     "build": "tsup src/index.ts --format esm --dts",
     "dev": "tsup src/index.ts --format esm --watch"
   },
@@ -37,6 +37,7 @@
   },
   "homepage": "https://github.com/pwlmc/morando#readme",
   "dependencies": {
+    "jtd": "^0.1.1",
     "yargs": "^18.0.0"
   },
   "devDependencies": {
