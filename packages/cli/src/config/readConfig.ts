@@ -1,34 +1,34 @@
-import Ajv from "ajv/dist/jtd.js";
-import configSchema from "./config.jtd.json";
 import defaultConfig from "./default-config.json";
 import { readFile } from "fs/promises";
 import { existsSync } from "fs";
-
-export class MissingConfigError extends Error {}
-
-export class InvalidConfigError extends Error {}
-
-const ajv = new Ajv();
-const parseConfig = ajv.compileParser(configSchema);
+import {
+  MissingConfigError,
+  MalformedConfigError,
+  InvalidConfigError,
+} from "./errors";
+import validateConfig from "./validateConfig";
 
 export default async function readConfig(filePath: string) {
   if (!existsSync(filePath)) {
     throw new MissingConfigError(`Configuration file not found: ${filePath}`);
   }
+  const configContents = await readFile(filePath, "utf-8");
 
-  const projectConfig = await readFile(filePath, "utf-8");
-
-  if (projectConfig.trim() === "") {
-    throw new InvalidConfigError(
-      "Invalid configuration: config cannot be an empty"
-    );
+  if (configContents.trim() === "") {
+    throw new MalformedConfigError("Config cannot be empty");
   }
 
-  const config = parseConfig(projectConfig);
-  if (config === undefined) {
-    throw new InvalidConfigError(
-      "Invalid configuration: config must be a valid JSON"
-    );
+  let projectConfig: Record<string, unknown>;
+  try {
+    projectConfig = JSON.parse(configContents);
+  } catch {
+    throw new MalformedConfigError("Config must be a valid JSON");
   }
-  return { ...defaultConfig, ...config };
+
+  const errors = validateConfig(projectConfig);
+  if (errors.length) {
+    throw new InvalidConfigError(errors);
+  }
+
+  return { ...defaultConfig, ...projectConfig };
 }

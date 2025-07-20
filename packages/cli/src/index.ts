@@ -8,7 +8,7 @@ import { fileURLToPath } from "url";
 import { dirname } from "path";
 import readConfig, {
   MissingConfigError,
-  InvalidConfigError,
+  MalformedConfigError,
 } from "./config/readConfig";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -39,7 +39,7 @@ yargs(hideBin(process.argv))
             "Please ensure you have initialized the project with 'morando init'."
           );
           process.exit(1);
-        } else if (error instanceof InvalidConfigError) {
+        } else if (error instanceof MalformedConfigError) {
           console.error("Invalid configuration file:", configFilePath);
           console.log(error.message);
           process.exit(1);

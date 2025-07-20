@@ -1,6 +1,9 @@
 {
   "optionalProperties": {
     "extends": {
+      "metadata": {
+        "description": "Path to the parent config"
+      },
       "type": "string"
     },
     "includes": {
