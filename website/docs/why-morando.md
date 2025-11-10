@@ -8,7 +8,7 @@ sidebar_position: 1
 
 Building large apps today still feels harder than it should be:
 
-### Layers don’t scale
+### Layers alond don’t scale well
 
 Most scalable architecture attempts are rooted in a traditional layered model. While this approach introduces some structure, it tends to become rigid and cumbersome as applications grow. Layers force a hierarchical thinking that works well in small scopes but struggles to accommodate complex, evolving systems.
 
