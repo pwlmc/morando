@@ -23,7 +23,7 @@ It must satisfy the following criteria:
 Intuitively, a **single-file** module can be thought of as any file within your project that can be directly imported.
 :::
 
-This architecture makes no assumptions about the module system used in the project—whether it’s CommonJS, ES Modules, UMD, or any other format, the structural concepts apply independently of the underlying module syntax.
+This architecture makes no assumptions about the module system used in the project, whether it’s CommonJS, ES Modules, UMD, or any other format, the structural concepts apply independently of the underlying module syntax.
 
 ### Folder modules and Submodules
 
