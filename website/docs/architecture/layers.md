@@ -21,15 +21,20 @@ Without this layered structure in place, there’s no way to enforce architectur
 
 In this system, **every single-file module must belong to a layer**.
 
-<details>
-<summary>How Is a File Assigned to a Layer?</summary>
-
 When a file is assigned to a layer, we say it **represents** that layer.
 These files are the **layer representatives** and they serve as the smallest, most atomic participants in layer validation mechanism.
 
-By default, the system uses a **built-in** classifier based on file or folder naming (see “Layer Modules” below). This works automatically - no manual tagging needed.
+<details>
+<summary>How Is a File Assigned to a Layer?</summary>
+
+
+By default, the system uses a classifier defined in the project template based on file or folder naming convention 
+(more on Templates later). Ideally, it should work well for most of the use cases and remove the need for manual tagging to zero.
 
 However, you can also define **custom classification rules** at the project level. For example, you might want to classify files by filename pattern (e.g., \*.service.ts → domain layer). These custom rules override the default behavior and allow for greater expressiveness. 
+
+That gives you a way to make the architecture truly own which may come in handy especially during the transition periods
+eg. while the project is gradually updated to comply with the Modando architecture.
 </details>
 
 For **folder modules** we determine their layer representation by the **highest layer represented by their submodules**. For example, the following folder module:
