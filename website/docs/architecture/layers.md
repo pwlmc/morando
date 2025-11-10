@@ -31,10 +31,8 @@ These files are the **layer representatives** and they serve as the smallest, mo
 By default, the system uses a classifier defined in the project template based on file or folder naming convention 
 (more on Templates later). Ideally, it should work well for most of the use cases and remove the need for manual tagging to zero.
 
-However, you can also define **custom classification rules** at the project level. For example, you might want to classify files by filename pattern (e.g., \*.service.ts → domain layer). These custom rules override the default behavior and allow for greater expressiveness. 
-
-That gives you a way to make the architecture truly own which may come in handy especially during the transition periods
-eg. while the project is gradually updated to comply with the Modando architecture.
+However, you can also define **custom classification rules** at the project level. For example, you might want to classify files by filename pattern (e.g., \*.service.ts → domain layer). These custom rules override the default behavior and allow you to make the architecture truly your own. 
+It may also come in handy during the transition periods, for example while the project is gradually updated to comply with the Modando architecture.
 </details>
 
 For **folder modules** we determine their layer representation by the **highest layer represented by their submodules**. For example, the following folder module:
