@@ -22,7 +22,7 @@ Without this layered structure in place, there’s no way to enforce architectur
 In this system, **every single-file module must belong to a layer**.
 
 <details>
-<summary>How Is a File Assigned to a Layer?</summary>summary>
+<summary>How Is a File Assigned to a Layer?</summary>
 
 When a file is assigned to a layer, we say it **represents** that layer.
 These files are the **layer representatives** and they serve as the smallest, most atomic participants in layer validation mechanism.
