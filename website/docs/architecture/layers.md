@@ -48,6 +48,7 @@ Assuming that:
 - `firstLayerModule.ts` represents `first` layer
 - `SecondLayerFile.ts` represents `second` layer
 - In the list of layers `second` is higher than `first`
+  
 Then `MyModule` represents `second` layer.
 
 :::info
@@ -59,7 +60,7 @@ Notice that it's relatively easy to change the folder module layer by moving the
 To keep your architecture clean, there’s one core rule you need to follow:
 
 :::tip
-A module can only depend on the same layer module or from layers below it.
+A module can only depend on the same layer module or module representing lower layers.
 :::
 
 The rule is **strict** and **global**:
