@@ -22,15 +22,12 @@ Even when teams recognize architectural problems, they face a deeper challenge: 
 
 ## The solution
 
-To address these challenges, we need a different foundation — one that allows systems to grow without losing structure, and teams to collaborate without creating chaos.
+To address these challenges, we need a different foundation. One that allows systems to grow without losing structure, and teams to collaborate without creating chaos.
 
-The key is a **flexible Module abstraction**.
+The key is to merge Layers with a **flexible Module abstraction**. Modules provide a natural way to express boundaries, manage complexity recursively, and evolve the system without unnecessary coupling.
 
-Instead of relying solely on rigid layers or informal coordinators, we organize code around Modules: independent, cohesive units that can contain logic, UI, state, and even other Modules.
-Modules provide a natural way to express boundaries, manage complexity recursively, and evolve the system without unnecessary coupling.
-
-With Modules as first-class citizens, **Morando's Layered-Modular Monolith Architecture offers**:
+With merging Layers and Modules, **Morando's Layered-Modular Monolith Architecture offers**:
 
 - A **clear vocabulary** for discussing system design.
-- An intuitive way to **measure and improve** architectural decisions (by looking at Module boundaries and dependencies).
-- A path to **tooling** that can support and enforce good practices over time.
+- An intuitive way to **measure and improve** architectural decisions.
+- A **tooling** that support and enforce good practices all the time.
