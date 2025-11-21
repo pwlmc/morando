@@ -1,24 +1,32 @@
 {
   "layers": {
-    "list": ["pages", "components", "hooks", "business", "utils", "model"],
+    "list": ["core", "business", "hooks", "components", "pages"],
     "default": "business",
     "matchers": [
+      {
+        "layer": "core",
+        "pattern": "**/model.ts"
+      },
+      {
+        "layer": "core",
+        "pattern": "**/constants.ts"
+      },
       {
         "layer": "pages",
         "pattern": "/**/*Page.tsx"
       },
       {
-        "layer": "components",
-        "pattern": "**/components/**/*.tsx"
-      },
-      {
         "layer": "hooks",
-        "pattern": "**/use[A-Z]*.{ts,tsx}"
+        "pattern": "**/use[A-Z0-9]+.{ts,tsx}"
       },
       {
-        "layer": "utils",
-        "pattern": "**/utils/**/[a-z]*.ts}"
-      }
+        "layer": "components",
+        "pattern": "**/*.tsx"
+      },      
+      {
+        "layer": "business",
+        "pattern": "**/*.ts"
+      },
     ]
   }
 }
