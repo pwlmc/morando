@@ -1,32 +1,37 @@
 {
-  "layers": {
-    "list": ["core", "business", "hooks", "components", "pages"],
-    "default": "business",
-    "matchers": [
-      {
-        "layer": "core",
-        "pattern": "**/model.ts"
-      },
-      {
-        "layer": "core",
-        "pattern": "**/constants.ts"
-      },
-      {
-        "layer": "pages",
-        "pattern": "/**/*Page.tsx"
-      },
-      {
-        "layer": "hooks",
-        "pattern": "**/use[A-Z0-9]+.{ts,tsx}"
-      },
-      {
-        "layer": "components",
-        "pattern": "**/*.tsx"
-      },      
-      {
-        "layer": "business",
-        "pattern": "**/*.ts"
-      },
-    ]
-  }
+  "layers": ["core", "business", "hooks", "components", "pages", "main"],
+  "layerMatchers": [
+    {
+      "layer": "core",
+      "pattern": "**/model.ts"
+    },
+    {
+      "layer": "core",
+      "pattern": "**/constants.ts"
+    },
+    {
+      "layer": "pages",
+      "pattern": "/**/*Page.tsx"
+    },
+    {
+      "layer": "hooks",
+      "pattern": "**/use[A-Z0-9]+.{ts,tsx}"
+    },
+    {
+      "layer": "components",
+      "pattern": "**/*.tsx"
+    },     
+    {
+      "layer": "core",
+      "pattern": "**/Core/**/*.ts"
+    },  
+    {
+      "layer": "main",
+      "pattern": "**/Main/**/*.ts"
+    },
+    {
+      "layer": "business",
+      "pattern": "**/*.ts"
+    },
+  ]
 }
