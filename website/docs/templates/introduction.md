@@ -8,11 +8,11 @@ How you choose layers for your project may be more important than you think, and
 They are truly an expression of how Single Page App, Mobile, Hybrid, Server-Side projects can differ from each other.
 The true art lies in finding the right split of layers, as expressed through classifiers.
 
-## Layer types
+## Universal layer types
 
 In general, the practice shows that we will usually have to deal with the following *types of layers* in our JavaScript applications:
 
-#### Definitions
+### Definitions
 
 Compile-time structure and domain contracts:
 *	Type definitions, invariants, constants, feature flags, shared enums
@@ -20,7 +20,7 @@ Compile-time structure and domain contracts:
 
 They define **what is valid**.
 
-#### Behaviors 
+### Behaviors 
 
 Domain logic that executes over runtime state:
 * Owns stateful value objects, state transformations, derived calculations, workflows
@@ -28,7 +28,7 @@ Domain logic that executes over runtime state:
 
 They define **what application does**.
 
-#### Presentation
+### Presentation
 
 Rendering and interactions:
 * Components, styles, assets
@@ -36,7 +36,7 @@ Rendering and interactions:
 
 It defines **how things look and feel**. 
 
-#### Root
+### Main
 
 Wires everything together:
 * startup, routing, environment config
@@ -44,7 +44,9 @@ Wires everything together:
 
 It defines **how the application is assembled**. 
 
-That said, those types of layers are not the layers themselves, or not always at least.
+## Layer templates
+
+That said, those *types of layers* are **not** the layers themselves, or not always at least.
 
 Let’s take a step back. The practice shows that these days, we usually build our products with a multi-tier architecture. For example:
 * There might be a Node.js server that saves data to the Postgres DB and interacts with the outside world via a REST API.
