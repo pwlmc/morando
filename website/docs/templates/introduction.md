@@ -4,12 +4,45 @@ sidebar_position: 1
 
 # Introduction to Templates (WIP)
 
-How you choose layers for your project may be more important than you think, and sometimes, more difficult also. They are truly an expression of how Single Page App, Mobile, Hybrid, Server-Side projects can differ from each other. The true art lies in finding the right split of layers, as expressed through classifiers.
+How you choose layers for your project may be more important than you think, and sometimes, more difficult also. 
+They are truly an expression of how Single Page App, Mobile, Hybrid, Server-Side projects can differ from each other.
+The true art lies in finding the right split of layers, as expressed through classifiers.
 
-In general, the practice shows that we will usually have to deal with the following types of layers in our JavaScript applications:
-* Core layers
-* Business layers
-* Presentational layers
+## Layer types
+
+In general, the practice shows that we will usually have to deal with the following *types of layers* in our JavaScript applications:
+
+#### Definitions
+
+Compile-time structure and domain contracts:
+*	Type definitions, invariants, constants, feature flags, shared enums
+*	Type-guards, validation rules, pure metadata
+
+They define **what is valid**.
+
+#### Behaviors 
+
+Domain logic that executes over runtime state:
+* Owns stateful value objects, state transformations, derived calculations, workflows
+* Implements rules, algorithms, reducers, services, orchestration, and side effects
+
+They define **what application does**.
+
+#### Presentation
+
+Rendering and interactions:
+* Components, styles, assets
+* Event handlers, observers, serializers
+
+It defines **how things look and feel**. 
+
+#### Root
+
+Wires everything together:
+* startup, routing, environment config
+* clients creation and dependency injection
+
+It defines **how the application is assembled**. 
 
 That said, those types of layers are not the layers themselves, or not always at least.
 
