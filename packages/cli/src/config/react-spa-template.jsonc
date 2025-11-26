@@ -1,12 +1,12 @@
 {
-  "layers": ["core", "business", "hooks", "components", "pages", "main"],
+  "layers": ["definitions", "behaviors", "hooks", "components", "pages", "main"],
   "layerMatchers": [
     {
-      "layer": "core",
+      "layer": "definitions",
       "pattern": "**/model.ts"
     },
     {
-      "layer": "core",
+      "layer": "definitions",
       "pattern": "**/constants.ts"
     },
     {
@@ -20,17 +20,13 @@
     {
       "layer": "components",
       "pattern": "**/*.tsx"
-    },     
-    {
-      "layer": "core",
-      "pattern": "**/Core/**/*.ts"
     },  
     {
       "layer": "main",
       "pattern": "**/Main/**/*.ts"
     },
     {
-      "layer": "business",
+      "layer": "behaviors",
       "pattern": "**/*.ts"
     },
   ]
