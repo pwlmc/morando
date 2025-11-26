@@ -17,39 +17,20 @@
       }
     },
     "layers": {
-      "optionalProperties": {
-        "list": {
-          "elements": {
+      "elements": {
+        "type": "string"
+      }
+    },
+    "layerMatchers": {
+      "elements": {
+        "properties": {
+          "layer": {
+            "type": "string"
+          },
+          "pattern": {
             "type": "string"
           }
         },
-        "default": {
-          "type": "string"
-        },
-        "matchers": {
-          "elements": {
-            "properties": {
-              "layer": {
-                "type": "string"
-              },
-              "pattern": {
-                "type": "string"
-              }
-            },
-            "optionalProperties": {
-              "matcher": {
-                "type": "string"
-              }
-            }
-          }
-        }
-      }
-    },
-    "modules": {
-      "optionalProperties": {
-        "allowCircularDependencies": {
-          "type": "boolean"
-        }
       }
     }
   }
