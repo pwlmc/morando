@@ -68,6 +68,6 @@ By keeping configurations self-contained, we ensure that developers can easily u
 
 Since we cannot hide configuration complexity behind a common root config, Morando configurations must always stay small to remain readable and maintainable.
 
-**2. Automated migration tools**
+**2. Provide automated config migration tools**
 
-For major configuration schema or template changes, the Morando toolkit should provide automated migration tools. This is especially important for templates if we want them to become the de-facto standard architecture for the supported application types.
+For major configuration schema or template changes, the Morando toolkit should provide automated config migration tools.
