@@ -1,5 +1,5 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://morando.dev/config-v0.schema.json",
   "title": "Morando Configuration",
   "description": "Configuration schema for Morando architecture analysis tool",

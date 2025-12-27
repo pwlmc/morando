@@ -7,22 +7,21 @@ import { fileURLToPath } from "url";
 import { dirname } from "path";
 import {
   CONFIG_FILE_NAME,
-  readConfig,
   MissingConfigError,
   MalformedConfigError,
   InvalidConfigError,
-} from "./config/config";
+} from "./config/defs";
+import readConfig from "./config/readConfig";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const configFilePath = `${process.cwd()}/${CONFIG_FILE_NAME}`;
 
+console.log("aa");
+
 yargs(hideBin(process.argv))
   .command("init", "Initialize a new Morando project", async () => {
-    await copyFile(
-      `${__dirname}/../src/config/.morandorc.template.json`,
-      configFilePath
-    );
+    await copyFile(`${__dirname}/../templates/bare-v0.json`, configFilePath);
     console.log(
       `Initialized a new Morando project with configuration file: ${configFilePath}`
     );
@@ -31,6 +30,7 @@ yargs(hideBin(process.argv))
     "print-config",
     "Print the full Morando configuration for this project",
     async () => {
+      console.log("ooo");
       try {
         const config = await readConfig(configFilePath);
         console.log(config);

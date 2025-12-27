@@ -1,7 +1,14 @@
 import { readFile } from "fs/promises";
 import { existsSync } from "fs";
+import {
+  MissingConfigError,
+  MalformedConfigError,
+  InvalidConfigError,
+} from "./defs";
+import validateConfig from "./validateConfig";
 
-export async function readConfig(filePath: string) {
+export default async function readConfig(filePath: string) {
+  console.log("uuu");
   if (!existsSync(filePath)) {
     throw new MissingConfigError(`Configuration file not found: ${filePath}`);
   }
@@ -23,18 +30,5 @@ export async function readConfig(filePath: string) {
     throw new InvalidConfigError(errors);
   }
 
-  return { ...defaultConfig, ...projectConfig };
-}
-
-export function validateConfig(config: Record<string, unknown>): string[] {
-  const errors = validate(configSchema, config);
-
-  // todo: impement human-readable error communicates
-  // The current implementation is a stub for the future improvement.
-  // Context: JTD returns an array of error objects that might be hard
-  // to read for the end-users. We should aim to provide
-  // more informative errors when the config is not valid.
-  const formattedErrors = errors.map((error) => JSON.stringify(error));
-
-  return formattedErrors;
+  return projectConfig;
 }
