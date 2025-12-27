@@ -11,7 +11,7 @@ import {
   MissingConfigError,
   MalformedConfigError,
   InvalidConfigError,
-} from "./config";
+} from "./config/config";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

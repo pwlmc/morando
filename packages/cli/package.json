@@ -37,6 +37,7 @@
   },
   "homepage": "https://github.com/pwlmc/morando#readme",
   "dependencies": {
+    "ajv": "^6.12.6",
     "yargs": "^18.0.0"
   },
   "devDependencies": {

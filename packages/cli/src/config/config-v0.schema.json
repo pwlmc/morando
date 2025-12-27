@@ -1,6 +1,6 @@
 {
-  "$schema": "https://json-schema.org/draft-07/schema#",
-  "$id": "https://morando.dev/config-schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://morando.dev/config-v0.schema.json",
   "title": "Morando Configuration",
   "description": "Configuration schema for Morando architecture analysis tool",
   "type": "object",
@@ -20,7 +20,7 @@
       }
     },
     "layers": {
-      "description": "Ordered list of layer names, from highest to lowest abstraction level",
+      "description": "Ordered list of layer names, from highest to lowest",
       "type": "array",
       "items": {
         "type": "string",
