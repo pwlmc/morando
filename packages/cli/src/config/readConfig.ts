@@ -1,14 +1,14 @@
-import defaultConfig from "./default-config.json";
 import { readFile } from "fs/promises";
 import { existsSync } from "fs";
 import {
   MissingConfigError,
   MalformedConfigError,
   InvalidConfigError,
-} from "./errors";
+} from "./defs";
 import validateConfig from "./validateConfig";
 
 export default async function readConfig(filePath: string) {
+  console.log("uuu");
   if (!existsSync(filePath)) {
     throw new MissingConfigError(`Configuration file not found: ${filePath}`);
   }
@@ -30,5 +30,5 @@ export default async function readConfig(filePath: string) {
     throw new InvalidConfigError(errors);
   }
 
-  return { ...defaultConfig, ...projectConfig };
+  return projectConfig;
 }

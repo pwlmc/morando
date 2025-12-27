@@ -1,3 +1,5 @@
+export const CONFIG_FILE_NAME = ".morandorc.json";
+
 export class MissingConfigError extends Error {
   public filePath: string;
 

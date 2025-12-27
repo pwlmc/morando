@@ -1,0 +1,7 @@
+{
+    "includes": ["src/**/*.{ts,js}"],
+    "ignore": ["**/node_modules"],
+    "layers": [
+        "main"
+    ]
+}
