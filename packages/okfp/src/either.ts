@@ -30,7 +30,7 @@ function either<E, T>(value: Either<E, T>): EitherMonad<E, T> {
   const eitherMondad: EitherMonad<E, T> = {
     map: <U>(mapper: (right: T) => U): EitherMonad<E, U> => {
       return isRight(value)
-        ? either({ right: mapper(value.right) })
+        ? right(mapper(value.right))
         : (eitherMondad as unknown as EitherMonad<E, U>);
     },
 
