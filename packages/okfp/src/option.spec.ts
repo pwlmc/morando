@@ -1,12 +1,12 @@
 import { describe, it, expect } from "vitest";
-import { OptionMonad, some, none } from "./option";
-import { functorLawsSpec } from "./testUtils/functorLaws";
-import { monadLawsSpec } from "./testUtils/monadLaws";
+import { Option, some, none } from "./option.js";
+import { functorLawsSpec } from "./testUtils/functorLaws.js";
+import { monadLawsSpec } from "./testUtils/monadLaws.js";
 
-type OptionTestTag<T> = { tag: "SOME"; some: T } | { tag: "NONE" };
+type OptionTag<T> = { tag: "SOME"; some: T } | { tag: "NONE" };
 
-const asTag = <T>(value: OptionMonad<T>) =>
-  value.match<OptionTestTag<T>>(
+const asTag = <T>(value: Option<T>) =>
+  value.match<OptionTag<T>>(
     (some) => ({ tag: "SOME" as const, some }),
     () => ({ tag: "NONE" as const })
   );
@@ -44,9 +44,35 @@ describe("option", () => {
     });
   });
 
+  describe("getOrElse", () => {
+    const fallback = () => 0;
+
+    it("should return the some value", () => {
+      const value = some(2);
+      expect(value.getOrElse(fallback)).toBe(2);
+    });
+
+    it("should map the fallback value", () => {
+      const value = none();
+      expect(value.getOrElse(fallback)).toBe(0);
+    });
+  });
+
+  describe("toNullable", () => {
+    it("should return the some value", () => {
+      const value = some(2);
+      expect(value.toNullable()).toBe(2);
+    });
+
+    it("should return null for none", () => {
+      const value = none();
+      expect(value.toNullable()).toBe(null);
+    });
+  });
+
   describe(
     "functor laws",
-    functorLawsSpec<OptionMonad<number>>({
+    functorLawsSpec<Option<number>>({
       of: (testValue) => some(testValue),
       map: (m, mapper) => m.map(mapper),
       asTag,
@@ -55,7 +81,7 @@ describe("option", () => {
 
   describe(
     "monad laws",
-    monadLawsSpec<OptionMonad<number>>({
+    monadLawsSpec<Option<number>>({
       of: (testValue) => some(testValue),
       flatMap: (m, mapper) => m.flatMap(mapper),
       asTag,

@@ -2,6 +2,7 @@
   "name": "@morando/cli",
   "version": "0.0.0",
   "description": "Architecture linter for the JavaScript ecosystem.",
+  "type": "module",
   "main": "dist/index.js",
   "scripts": {
     "lint": "oxlint",

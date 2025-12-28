@@ -17,8 +17,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const configFilePath = `${process.cwd()}/${CONFIG_FILE_NAME}`;
 
-console.log("aa");
-
 yargs(hideBin(process.argv))
   .command("init", "Initialize a new Morando project", async () => {
     await copyFile(`${__dirname}/../templates/bare-v0.json`, configFilePath);

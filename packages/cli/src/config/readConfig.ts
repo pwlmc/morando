@@ -4,8 +4,8 @@ import {
   MissingConfigError,
   MalformedConfigError,
   InvalidConfigError,
-} from "./defs";
-import validateConfig from "./validateConfig";
+} from "./defs.js";
+import validateConfig from "./validateConfig.js";
 
 export default async function readConfig(filePath: string) {
   console.log("uuu");
