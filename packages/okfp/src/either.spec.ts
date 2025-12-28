@@ -1,14 +1,12 @@
 import { describe, it, expect } from "vitest";
-import { EitherMonad, left, right } from "./either";
-import { monadLawsSpec } from "./testUtils/monadLaws";
-import { functorLawsSpec } from "./testUtils/functorLaws";
+import { Either, left, right } from "./either.js";
+import { monadLawsSpec } from "./testUtils/monadLaws.js";
+import { functorLawsSpec } from "./testUtils/functorLaws.js";
 
-type EitherTestTag<E, T> =
-  | { tag: "RIGHT"; right: T }
-  | { tag: "LEFT"; left: E };
+type EitherTag<E, T> = { tag: "RIGHT"; right: T } | { tag: "LEFT"; left: E };
 
-const asTag = <E, T>(value: EitherMonad<E, T>) =>
-  value.match<EitherTestTag<E, T>>(
+const asTag = <E, T>(value: Either<E, T>) =>
+  value.match<EitherTag<E, T>>(
     (left) => ({ tag: "LEFT" as const, left }),
     (right) => ({ tag: "RIGHT" as const, right })
   );
@@ -78,7 +76,7 @@ describe("either", () => {
 
   describe(
     "functor laws",
-    functorLawsSpec<EitherMonad<never, number>>({
+    functorLawsSpec<Either<never, number>>({
       of: (testValue) => right(testValue),
       map: (m, mapper) => m.map(mapper),
       asTag,
@@ -87,7 +85,7 @@ describe("either", () => {
 
   describe(
     "monad laws",
-    monadLawsSpec<EitherMonad<never, number>>({
+    monadLawsSpec<Either<never, number>>({
       of: (testValue) => right(testValue),
       flatMap: (m, mapper) => m.flatMap(mapper),
       asTag,

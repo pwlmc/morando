@@ -1,7 +1,10 @@
-export type OptionMonad<T> = {
-  map: <U>(mapper: (some: T) => U) => OptionMonad<U>;
-  flatMap: <U>(mapper: (some: T) => OptionMonad<U>) => OptionMonad<U>;
+export type Option<T> = {
+  map: <U>(mapper: (some: T) => U) => Option<U>;
+  flatMap: <U>(mapper: (some: T) => Option<U>) => Option<U>;
   match: <U>(onSome: (some: T) => U, onNone: () => U) => U;
+  getOrElse: (fallback: () => T) => T;
+  toNullable: () => T | null;
+  filter: (predicate: (some: T) => boolean) => Option<T>;
 };
 
 export type Some<T> = {
@@ -10,44 +13,98 @@ export type Some<T> = {
 
 export type None = Symbol;
 
-export type Option<T> = Some<T> | None;
+export type OptionV<T> = Some<T> | None;
 
-function isSome<T>(option: Option<T>): option is Some<T> {
+function isSome<T>(option: OptionV<T>): option is Some<T> {
   return typeof option === "object" && "some" in option;
 }
 
-function isNone(option: Option<unknown>): option is None {
-  return option === NONE;
-}
-
-function option<T>(option: Option<T>): OptionMonad<T> {
-  const optionMonad: OptionMonad<T> = {
+function option<T>(option: OptionV<T>): Option<T> {
+  const optionMonad: Option<T> = {
     map: <U>(mapper: (some: T) => U) => {
       return isSome(option)
         ? some(mapper(option.some))
-        : (optionMonad as unknown as OptionMonad<U>);
+        : (optionMonad as unknown as Option<U>);
     },
 
-    flatMap: <U>(mapper: (some: T) => OptionMonad<U>): OptionMonad<U> => {
+    flatMap: <U>(mapper: (some: T) => Option<U>): Option<U> => {
       return isSome(option)
         ? mapper(option.some)
-        : (optionMonad as unknown as OptionMonad<U>);
+        : (optionMonad as unknown as Option<U>);
     },
 
     match: <U>(onSome: (some: T) => U, onNone: () => U) => {
       return isSome(option) ? onSome(option.some) : onNone();
+    },
+
+    getOrElse: (fallback: () => T) => {
+      return isSome(option) ? option.some : fallback();
+    },
+
+    toNullable: (): T | null => {
+      return isSome(option) ? option.some : null;
+    },
+
+    filter: (predicate: (some: T) => boolean) => {
+      return isSome(option) && predicate(option.some) ? optionMonad : none();
     },
   };
 
   return optionMonad;
 }
 
-export function some<T>(some: T): OptionMonad<T> {
+export function some<T>(some: T): Option<T> {
   return option({ some });
 }
 
 const NONE = Symbol("None");
 
-export function none<T>(): OptionMonad<T> {
+export function none<T>(): Option<T> {
   return option<T>(NONE);
+}
+
+/**
+ * Creates an Option containing an array with all Some values from the provided array of Option<T>.
+ *
+ * Filters out None values and preserves the original order of Some values. If there are no Some values,
+ * the function returns Some([]) (an empty array wrapped in Some).
+ *
+ * This is useful for converting a list of optional values into a single optional list of concrete values.
+ *
+ * @example
+ * const opts = [some(1), none<number>(), some(3)];
+ * const compacted = compactOptions(opts); // Some([1, 3])
+ *
+ * @typeParam T - The type wrapped by the input Option instances.
+ * @param options - An array of Option<T> to compact.
+ * @returns An Option containing an array of all values from the Some instances in the input. Order is preserved.
+ */
+// todo: add tests
+export function compactOptions<T>(options: Option<T>[]): Option<T[]> {
+  const result: T[] = [];
+  for (const opt of options) {
+    opt.match(
+      (value) => result.push(value),
+      () => {}
+    );
+  }
+  return some(result);
+}
+
+/**
+ * Creates an {@link Option} from a nullable value.
+ *
+ * If {@link nullable} is `null` or `undefined`, returns {@link none}. Otherwise, wraps the provided value in {@link some}.
+ *
+ * @example
+ * fromNullable(0).getOrElse(() => 123); // 0
+ * fromNullable(null).toNullable(); // null
+ *
+ * @typeParam T - The non-null value type to wrap.
+ * @param nullable - A value that may be `null` or `undefined`.
+ * @returns An {@link Option} that is `Some` when the value is present, otherwise `None`.
+ */
+// todo: add tests
+export function fromNullable<T>(nullable: null | undefined | T): Option<T> {
+  return nullable == null ? none() : some<T>(nullable);
 }

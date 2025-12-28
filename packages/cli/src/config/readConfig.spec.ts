@@ -1,10 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import {
-  readConfig,
-  MissingConfigError,
-  MalformedConfigError,
-  validateConfig,
-} from "./config";
+import { MissingConfigError, MalformedConfigError } from "./defs";
+import validateConfig from "./validateConfig";
+import readConfig from "./readConfig";
 import { existsSync } from "fs";
 import { readFile } from "fs/promises";
 

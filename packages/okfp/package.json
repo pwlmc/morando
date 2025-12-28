@@ -6,6 +6,17 @@
   "author": "pwlmc",
   "type": "module",
   "main": "dist/",
+  "exports": {
+    "./either": {
+      "types": "./dist/either.d.mts",
+      "default": "./dist/either.mjs"
+    },
+    "./option": {
+      "types": "./dist/option.mts",
+      "default": "./dist/option.mjs"
+    }
+  },
+  "files": ["dist"],
   "scripts": {
     "lint": "oxlint",
     "typecheck": "tsc --noEmit",
