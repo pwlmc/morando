@@ -19,48 +19,50 @@ function isSome<T>(option: OptionV<T>): option is Some<T> {
   return typeof option === "object" && "some" in option;
 }
 
-function option<T>(option: OptionV<T>): Option<T> {
-  const optionMonad: Option<T> = {
+function createOption<T>(value: OptionV<T>): Option<T> {
+  const option: Option<T> = {
     map: <U>(mapper: (some: T) => U) => {
-      return isSome(option)
-        ? some(mapper(option.some))
-        : (optionMonad as unknown as Option<U>);
+      return isSome(value)
+        ? some(mapper(value.some))
+        : (option as unknown as Option<U>);
     },
 
     flatMap: <U>(mapper: (some: T) => Option<U>): Option<U> => {
-      return isSome(option)
-        ? mapper(option.some)
-        : (optionMonad as unknown as Option<U>);
+      return isSome(value)
+        ? mapper(value.some)
+        : (option as unknown as Option<U>);
     },
 
+    // todo: add tests
     match: <U>(onSome: (some: T) => U, onNone: () => U) => {
-      return isSome(option) ? onSome(option.some) : onNone();
+      return isSome(value) ? onSome(value.some) : onNone();
     },
 
     getOrElse: (fallback: () => T) => {
-      return isSome(option) ? option.some : fallback();
+      return isSome(value) ? value.some : fallback();
     },
 
     toNullable: (): T | null => {
-      return isSome(option) ? option.some : null;
+      return isSome(value) ? value.some : null;
     },
 
+    // todo: add tests
     filter: (predicate: (some: T) => boolean) => {
-      return isSome(option) && predicate(option.some) ? optionMonad : none();
+      return isSome(value) && predicate(value.some) ? option : none();
     },
   };
 
-  return optionMonad;
+  return option;
 }
 
 export function some<T>(some: T): Option<T> {
-  return option({ some });
+  return createOption({ some });
 }
 
 const NONE = Symbol("None");
 
 export function none<T>(): Option<T> {
-  return option<T>(NONE);
+  return createOption<T>(NONE);
 }
 
 /**
@@ -73,14 +75,14 @@ export function none<T>(): Option<T> {
  *
  * @example
  * const opts = [some(1), none<number>(), some(3)];
- * const compacted = compactOptions(opts); // Some([1, 3])
+ * const compacted = compact(opts); // Some([1, 3])
  *
  * @typeParam T - The type wrapped by the input Option instances.
  * @param options - An array of Option<T> to compact.
  * @returns An Option containing an array of all values from the Some instances in the input. Order is preserved.
  */
 // todo: add tests
-export function compactOptions<T>(options: Option<T>[]): Option<T[]> {
+export function compact<T>(options: Option<T>[]): Option<T[]> {
   const result: T[] = [];
   for (const opt of options) {
     opt.match(

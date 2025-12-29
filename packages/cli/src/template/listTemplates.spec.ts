@@ -9,5 +9,14 @@ describe("template", () => {
       const expectedNames = Object.keys(TEMPLATE_DESCRIPTIONS);
       expect(names.toNullable()).toEqual(expectedNames);
     });
+
+    it.todo(
+      "should return None when reading the files from the fs fails",
+      () => {}
+    );
+
+    it.todo("should ignore the fs templates for which there is no description");
+
+    it.todo("should ignore templates with the malformed filenames");
   });
 });

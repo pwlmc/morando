@@ -24,18 +24,18 @@ function isRight<E, T>(value: EitherV<E, T>): value is Right<T> {
   return typeof value === "object" && "right" in value;
 }
 
-function either<E, T>(value: EitherV<E, T>): Either<E, T> {
-  const eitherMondad: Either<E, T> = {
+function createEither<E, T>(value: EitherV<E, T>): Either<E, T> {
+  const either: Either<E, T> = {
     map: <U>(mapper: (right: T) => U): Either<E, U> => {
       return isRight(value)
         ? right(mapper(value.right))
-        : (eitherMondad as unknown as Either<E, U>);
+        : (either as unknown as Either<E, U>);
     },
 
     mapLeft: <EE>(mapper: (left: E) => EE): Either<EE, T> => {
       return isLeft(value)
-        ? either({ left: mapper(value.left) })
-        : (eitherMondad as unknown as Either<EE, T>);
+        ? createEither({ left: mapper(value.left) })
+        : (either as unknown as Either<EE, T>);
     },
 
     getOrElse: (onLeft: (left: E) => T) =>
@@ -50,17 +50,17 @@ function either<E, T>(value: EitherV<E, T>): Either<E, T> {
     ): Either<EE | E, U> => {
       return isRight(value)
         ? mapper(value.right)
-        : (eitherMondad as unknown as Either<EE | E, U>);
+        : (either as unknown as Either<EE | E, U>);
     },
   };
 
-  return eitherMondad;
+  return either;
 }
 
 export function left<E, T = never>(left: E): Either<E, T> {
-  return either({ left });
+  return createEither({ left });
 }
 
 export function right<T, E = never>(right: T): Either<E, T> {
-  return either({ right });
+  return createEither({ right });
 }

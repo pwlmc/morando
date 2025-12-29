@@ -16,17 +16,21 @@
       "default": "./dist/option.mjs"
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "lint": "oxlint",
     "typecheck": "tsc --noEmit",
     "test": "vitest",
     "build": "tsdown  --format esm --dts",
-    "dev": "tsdown --format esm --watch"
+    "dev": "tsdown --format esm --dts --watch"
   },
   "devDependencies": {
+    "@vitest/coverage-v8": "^4.0.16",
     "oxlint": "^1.35.0",
     "tsdown": "^0.18.3",
-    "typescript": "^5.6.3"
+    "typescript": "^5.6.3",
+    "vitest": "^4.0.16"
   }
 }

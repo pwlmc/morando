@@ -1,12 +1,6 @@
 import { readdirSync } from "fs";
 import { normalize } from "path";
-import {
-  some,
-  none,
-  type Option,
-  compactOptions,
-  fromNullable,
-} from "okfp/option";
+import { compact, fromNullable, type Option, some, none } from "okfp/option";
 import { type Template } from "./defs.js";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
@@ -25,7 +19,7 @@ export default function listTemplates(): Option<Template[]> {
   const descriptions = Object.entries(TEMPLATE_DESCRIPTIONS);
   return readTemplatesDir()
     .flatMap((fnames) =>
-      compactOptions(
+      compact(
         fnames.map((filename) =>
           parseTemplateFileName(filename).map((d) => ({
             ...d,
@@ -35,7 +29,7 @@ export default function listTemplates(): Option<Template[]> {
       )
     )
     .flatMap((fdata) =>
-      compactOptions(
+      compact(
         descriptions.reduce(
           (acc, [name, description]) =>
             acc.concat([
