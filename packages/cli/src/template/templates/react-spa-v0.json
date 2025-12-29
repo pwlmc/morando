@@ -6,17 +6,21 @@
     "pages",
     "components",
     "hooks",
-    "behaviors",
-    "definitions"
+    "business",
+    "defs"
   ],
   "layerMatchers": [
     {
-      "layer": "definitions",
+      "layer": "defs",
       "pattern": "**/model.ts"
     },
     {
-      "layer": "definitions",
+      "layer": "defs",
       "pattern": "**/constants.ts"
+    },
+    {
+      "layer": "defs",
+      "pattern": "**/defs.ts"
     },
     {
       "layer": "pages",
@@ -35,7 +39,7 @@
       "pattern": "**/Main/**/*.ts"
     },
     {
-      "layer": "behaviors",
+      "layer": "business",
       "pattern": "**/*.ts"
     }
   ]

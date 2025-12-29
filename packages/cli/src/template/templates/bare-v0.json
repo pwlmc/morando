@@ -1,7 +1,11 @@
 {
-    "includes": ["src/**/*.{ts,js}"],
-    "ignore": ["**/node_modules"],
-    "layers": [
-        "main"
-    ]
+  "includes": ["src/**/*.{ts,js}"],
+  "ignore": ["**/node_modules"],
+  "layers": ["main"],
+  "layerMatchers": [
+    {
+      "layer": "main",
+      "pattern": "**/*"
+    }
+  ]
 }

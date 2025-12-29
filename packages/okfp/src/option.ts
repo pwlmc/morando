@@ -55,12 +55,33 @@ function createOption<T>(value: OptionV<T>): Option<T> {
   return option;
 }
 
+/**
+ * Creates an {@link Option} that contains a value.
+ *
+ * Use this to wrap an existing value into an `Option<T>` representing presence
+ * (as opposed to `none`, which represents absence).
+ *
+ * @typeParam T - Type of the wrapped value.
+ * @param some - The value to store in the option.
+ * @returns An {@link Option} containing the provided value.
+ */
 export function some<T>(some: T): Option<T> {
   return createOption({ some });
 }
 
 const NONE = Symbol("None");
 
+/**
+ * Creates an {@link Option} representing the absence of a value.
+ *
+ * @typeParam T - The type of the value that would be contained if present.
+ * @returns An {@link Option} in the `None` state.
+ *
+ * @example
+ * ```ts
+ * const value = none<number>();
+ * ```
+ */
 export function none<T>(): Option<T> {
   return createOption<T>(NONE);
 }

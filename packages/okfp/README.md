@@ -1,3 +1,3 @@
 # OKFP
 
-> A decent Functional Programming utils for TypeScript
+Decent FP utils for TypeScript. No hype, just OK tools.
