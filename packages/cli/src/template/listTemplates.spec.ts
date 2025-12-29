@@ -22,7 +22,7 @@ describe("listTemplates", () => {
     const templates = listTemplates(dir, whitelist);
     const names = templates.map((ts) => ts.map((t) => t.name));
     const expectedNames = Object.keys(whitelist);
-    expect(names.toNullable()).toEqual(expectedNames);
+    expect(names.toResult()).toEqual({ ok: true, value: expectedNames });
   });
 
   it("should read the files from the provided dir path", () => {
@@ -31,11 +31,12 @@ describe("listTemplates", () => {
   });
 
   it("should return None when reading the files from the fs fails", () => {
+    const error = new Error("Test error");
     readdirSyncMock.mockImplementation(() => {
-      throw new Error("Test error");
+      throw error;
     });
     const names = listTemplates(dir, whitelist);
-    expect(names.toNullable()).toBe(null);
+    expect(names.toResult()).toEqual({ ok: false, error });
   });
 
   it("should ignore the fs templates for which there is no description", () => {
@@ -43,7 +44,7 @@ describe("listTemplates", () => {
       foo: "Foo template",
     });
     const names = templates.map((ts) => ts.map((t) => t.name));
-    expect(names.toNullable()).toEqual(["foo"]);
+    expect(names.toResult()).toEqual({ ok: true, value: ["foo"] });
   });
 
   it("should ignore templates with the malformed filenames", () => {
@@ -54,20 +55,23 @@ describe("listTemplates", () => {
     ]);
     const templates = listTemplates(dir, whitelist);
     const names = templates.map((ts) => ts.map((t) => t.name));
-    expect(names.toNullable()).toEqual(["foo"]);
+    expect(names.toResult()).toEqual({ ok: true, value: ["foo"] });
   });
 
   it("should parse the filename data", () => {
     const filename = "foo-v99.json";
     readdirSyncMock.mockReturnValue([filename]);
     const templates = listTemplates(dir, whitelist);
-    expect(templates.toNullable()).toEqual([
-      {
-        name: "foo",
-        version: 99,
-        description: whitelist.foo,
-        path: dir + "/" + filename,
-      },
-    ]);
+    expect(templates.toResult()).toEqual({
+      ok: true,
+      value: [
+        {
+          name: "foo",
+          version: 99,
+          description: whitelist.foo,
+          path: dir + "/" + filename,
+        },
+      ],
+    });
   });
 });

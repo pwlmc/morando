@@ -87,31 +87,30 @@ export function none<T>(): Option<T> {
 }
 
 /**
- * Creates an Option containing an array with all Some values from the provided array of Option<T>.
- *
- * Filters out None values and preserves the original order of Some values. If there are no Some values,
- * the function returns Some([]) (an empty array wrapped in Some).
- *
- * This is useful for converting a list of optional values into a single optional list of concrete values.
+ * Returns an array with all Some values from the provided array of Option<T>. Drops all the None values.
  *
  * @example
  * const opts = [some(1), none<number>(), some(3)];
- * const compacted = compact(opts); // Some([1, 3])
+ * const compacted = compact(opts); // [1, 3]
  *
  * @typeParam T - The type wrapped by the input Option instances.
  * @param options - An array of Option<T> to compact.
- * @returns An Option containing an array of all values from the Some instances in the input. Order is preserved.
+ * @returns An array of all values from the Some instances in the input. Order is preserved.
  */
 // todo: add tests
-export function compact<T>(options: Option<T>[]): Option<T[]> {
-  const result: T[] = [];
-  for (const opt of options) {
-    opt.match(
-      (value) => result.push(value),
-      () => {}
-    );
-  }
-  return some(result);
+export function compact<T>(options: Option<T>[]): T[] {
+  return options.flatMap((o) =>
+    o.match(
+      (value) => [value],
+      () => []
+    )
+  );
+}
+
+// todo: implement and add tests
+// compared to compact it should return None if there are any None in array
+export function sequence<T>(options: Option<T>[]): Option<T[]> {
+  throw new Error("Not implemented");
 }
 
 /**

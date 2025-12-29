@@ -2,52 +2,50 @@
 
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
-import { copyFile } from "fs/promises";
-import { fileURLToPath } from "url";
-import { dirname } from "path";
-import {
-  CONFIG_FILE_NAME,
-  MissingConfigError,
-  MalformedConfigError,
-  InvalidConfigError,
-} from "./config/defs";
-import readConfig from "./config/readConfig";
+import initCommand, { ValidationError } from "./initCommand.js";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const configFilePath = `${process.cwd()}/${CONFIG_FILE_NAME}`;
-
-yargs(hideBin(process.argv))
-  .command("init", "Initialize a new Morando project", async () => {
-    await copyFile(`${__dirname}/../templates/bare-v0.json`, configFilePath);
-    console.log(
-      `Initialized a new Morando project with configuration file: ${configFilePath}`
-    );
-  })
+const y = yargs()
   .command(
-    "print-config",
-    "Print the full Morando configuration for this project",
-    async () => {
-      console.log("ooo");
-      try {
-        const config = await readConfig(configFilePath);
-        console.log(config);
-      } catch (error) {
-        if (error instanceof MissingConfigError) {
-          console.error("Configuration file not found:", configFilePath);
-          console.log(
-            "Please ensure you have initialized the project with 'morando init'."
-          );
-          process.exit(1);
-        } else if (
-          error instanceof MalformedConfigError ||
-          error instanceof InvalidConfigError
-        ) {
-          console.log(error.message);
-          process.exit(1);
+    "init [dir]",
+    "Initialize a new Morando project",
+    (yargs) => {
+      return yargs
+        .option("force", {
+          alias: "f",
+          type: "boolean",
+          description: "Force overriding the configuration file, if it exists",
+        })
+        .option("list", {
+          alias: "l",
+          type: "boolean",
+          description: "List all the available project templates",
+        })
+        .option("template", {
+          alias: "t",
+          type: "string",
+          description: "Selected template",
+        })
+        .positional("dir", {
+          describe: "Project directory",
+          default: ".",
+        });
+    },
+    (args) => {
+      return initCommand(args.dir, args).match<Promise<never> | void>(
+        (left) => {
+          if (left instanceof ValidationError) {
+            return Promise.reject(left.message);
+          }
+          if (left instanceof Error) {
+            console.error(left);
+          }
+          return;
+        },
+        () => {
+          console.log("Project initialize correctly");
         }
-        throw error;
-      }
+      );
     }
   )
-  .parse();
+  .demandCommand(1)
+  .parse(hideBin(process.argv));

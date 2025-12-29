@@ -1,11 +1,3 @@
-export type Either<E, T> = {
-  map: <U>(mapper: (right: T) => U) => Either<E, U>;
-  mapLeft: <EE>(mapper: (left: E) => EE) => Either<EE, T>;
-  flatMap: <EE, U>(mapper: (right: T) => Either<EE, U>) => Either<EE | E, U>;
-  match: <U>(onLeft: (left: E) => U, onRight: (right: T) => U) => U;
-  getOrElse: (onLeft: (left: E) => T) => T;
-};
-
 export type Left<E> = {
   readonly left: E;
 };
@@ -23,6 +15,21 @@ function isLeft<E, T>(value: EitherV<E, T>): value is Left<E> {
 function isRight<E, T>(value: EitherV<E, T>): value is Right<T> {
   return typeof value === "object" && "right" in value;
 }
+
+export type Result<E, T> = { ok: true; value: T } | { ok: false; error: E };
+
+export type Either<E, T> = {
+  map: <U>(mapper: (right: T) => U) => Either<E, U>;
+  mapLeft: <EE>(mapper: (left: E) => EE) => Either<EE, T>;
+  flatMap: <U>(mapper: (right: T) => Either<E, U>) => Either<E, U>;
+  match: <U>(onLeft: (left: E) => U, onRight: (right: T) => U) => U;
+  getOrElse: (onLeft: (left: E) => T) => T;
+  filterOrElse: (
+    predicate: (right: T) => boolean,
+    onLeft: () => E
+  ) => Either<E, T>;
+  toResult: () => Result<E, T>;
+};
 
 function createEither<E, T>(value: EitherV<E, T>): Either<E, T> {
   const either: Either<E, T> = {
@@ -52,6 +59,31 @@ function createEither<E, T>(value: EitherV<E, T>): Either<E, T> {
         ? mapper(value.right)
         : (either as unknown as Either<EE | E, U>);
     },
+
+    // todo: add tests
+    filterOrElse: <EE = E>(
+      predicate: (right: T) => boolean,
+      onLeft: () => EE | E
+    ): Either<E | EE, T> => {
+      return isRight(value)
+        ? predicate(value.right)
+          ? (either as Either<EE | E, T>)
+          : left(onLeft())
+        : (either as Either<EE | E, T>);
+    },
+
+    // todo: add tests
+    toResult: (): Result<E, T> => {
+      return isRight(value)
+        ? {
+            ok: true,
+            value: value.right,
+          }
+        : {
+            ok: false,
+            error: value.left,
+          };
+    },
   };
 
   return either;
@@ -63,4 +95,12 @@ export function left<E, T = never>(left: E): Either<E, T> {
 
 export function right<T, E = never>(right: T): Either<E, T> {
   return createEither({ right });
+}
+
+// todo: add tests
+export function fromNullable<E, T>(
+  nullable: T | null | undefined,
+  onNullish: () => E
+): Either<E, T> {
+  return nullable != null ? right<T, E>(nullable) : left<E, T>(onNullish());
 }
