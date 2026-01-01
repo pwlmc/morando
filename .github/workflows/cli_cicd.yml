@@ -22,12 +22,17 @@ jobs:
           path: "**/node_modules"
           key: ${{ runner.os }}-${{ hashFiles('package-lock.json') }}
 
-      - name: Install dependencies
+      - name: Install CLI dependencies
         if: steps.node-modules-cache.outputs.cache-hit != 'true'
         run: npm ci
         working-directory: ./packages/cli
 
-  lint:
+      - name: Install okfp dependencies
+        if: steps.node-modules-cache.outputs.cache-hit != 'true'
+        run: npm ci
+        working-directory: ./packages/okfp
+
+  build-okfp:
     needs: install-dependencies
     runs-on: ubuntu-latest
     steps:
@@ -44,13 +49,45 @@ jobs:
         with:
           path: "**/node_modules"
           key: ${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
+      - name: Build
+        run: npm run build
+        working-directory: ./packages/okfp
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: okfp-dist
+          path: packages/okfp/dist
+
+  lint:
+    needs: [install-dependencies, build-okfp]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ vars.CI_NODE_VERSION }}
+
+      - name: Restore node_modules
+        uses: actions/cache/restore@v4
+        with:
+          path: "**/node_modules"
+          key: ${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: okfp-dist
+          path: packages/okfp/dist
 
       - name: Lint
         run: npm run lint
         working-directory: ./packages/cli
 
   typecheck:
-    needs: install-dependencies
+    needs: [install-dependencies, build-okfp]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -66,13 +103,18 @@ jobs:
         with:
           path: "**/node_modules"
           key: ${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: okfp-dist
+          path: packages/okfp/dist
 
       - name: Type check
         run: npm run typecheck
         working-directory: ./packages/cli
 
   test:
-    needs: install-dependencies
+    needs: [install-dependencies, build-okfp]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -88,13 +130,18 @@ jobs:
         with:
           path: "**/node_modules"
           key: ${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: okfp-dist
+          path: packages/okfp/dist
 
       - name: Test
         run: npm run test
         working-directory: ./packages/cli
 
   build:
-    needs: install-dependencies
+    needs: [install-dependencies, build-okfp]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -110,6 +157,11 @@ jobs:
         with:
           path: "**/node_modules"
           key: ${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: okfp-dist
+          path: packages/okfp/dist
 
       - name: Build
         run: npm run build

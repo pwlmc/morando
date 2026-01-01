@@ -1,14 +1,8 @@
 import { readFile } from "fs/promises";
 import { existsSync } from "fs";
-import {
-  MissingConfigError,
-  MalformedConfigError,
-  InvalidConfigError,
-} from "./defs.js";
-import validateConfig from "./validateConfig.js";
+import { MissingConfigError, MalformedConfigError } from "./defs.js";
 
 export default async function readConfig(filePath: string) {
-  console.log("uuu");
   if (!existsSync(filePath)) {
     throw new MissingConfigError(`Configuration file not found: ${filePath}`);
   }
@@ -25,10 +19,10 @@ export default async function readConfig(filePath: string) {
     throw new MalformedConfigError("Config must be a valid JSON");
   }
 
-  const errors = validateConfig(projectConfig);
-  if (errors.length) {
-    throw new InvalidConfigError(errors);
-  }
+  // const errors = validateConfig(projectConfig);
+  // if (errors.length) {
+  //   throw new InvalidConfigError(errors);
+  // }
 
   return projectConfig;
 }

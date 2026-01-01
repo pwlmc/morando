@@ -1,18 +1,17 @@
 import { readdirSync } from "fs";
 import { normalize } from "path";
-import { compact, fromNullable, type Option, some, none } from "okfp/option";
+import { compact, fromNullable, type Option } from "okfp/option";
+import { type Either } from "okfp/either";
 import { type Template } from "./defs.js";
-import { fileURLToPath } from "url";
-import { dirname } from "path";
+import { pkgRootPath } from "../utils/fs.js";
+import { left, right } from "okfp/either";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const TEMPLATES_DIR = __dirname + "/templates";
+const TEMPLATES_DIR = pkgRootPath() + "/templates";
 
 export const TEMPLATE_WHITELIST = {
-  "react-spa": "React Single Page App template",
+  "react-spa": "React Single Page Apps",
   cli: "Command-Line tools",
-  bare: "Basic and unopinionated template; recommended for advanced users only",
+  bare: "Basic and unopinionated template, recommended for the advanced users only.",
 } as const;
 
 /**
@@ -26,10 +25,10 @@ export const TEMPLATE_WHITELIST = {
 export default function listTemplates(
   templatesDir: string = TEMPLATES_DIR,
   templateWhitelist: Record<string, string> = TEMPLATE_WHITELIST
-): Option<Template[]> {
+): Either<Error, Template[]> {
   const descriptions = Object.entries(templateWhitelist);
   return readTemplatesDir(templatesDir)
-    .flatMap((fnames) =>
+    .map((fnames) =>
       compact(
         fnames.map((filename) =>
           parseTemplateFileName(filename).map((d) => ({
@@ -39,7 +38,7 @@ export default function listTemplates(
         )
       )
     )
-    .flatMap((fdata) =>
+    .map((fdata) =>
       compact(
         descriptions.reduce(
           (acc, [name, description]) =>
@@ -59,13 +58,11 @@ export default function listTemplates(
     );
 }
 
-// Eventually replace with:
-// try(() => readdirSync(dir)).toOption()
-function readTemplatesDir(dir: string): Option<string[]> {
+function readTemplatesDir(dir: string): Either<Error, string[]> {
   try {
-    return some(readdirSync(dir));
+    return right(readdirSync(dir));
   } catch (e) {
-    return none();
+    return left(e as Error);
   }
 }
 

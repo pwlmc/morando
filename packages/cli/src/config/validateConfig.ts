@@ -3,9 +3,7 @@ import Ajv from "ajv";
 
 const ajv = new Ajv();
 
-export default function validateConfig(
-  config: Record<string, unknown>
-): string[] {
+export default function validateConfig(config: Record<string, unknown>) {
   const validate = ajv.compile(schema);
   const errors = validate(config);
 
