@@ -25,12 +25,6 @@ jobs:
       - name: Install CLI dependencies
         if: steps.node-modules-cache.outputs.cache-hit != 'true'
         run: npm ci
-        working-directory: ./packages/cli
-
-      - name: Install okfp dependencies
-        if: steps.node-modules-cache.outputs.cache-hit != 'true'
-        run: npm ci
-        working-directory: ./packages/okfp
 
   build-okfp:
     needs: install-dependencies
