@@ -1,7 +1,7 @@
 export type Option<T> = {
   map: <U>(mapper: (some: T) => U) => Option<U>;
   flatMap: <U>(mapper: (some: T) => Option<U>) => Option<U>;
-  match: <U>(onSome: (some: T) => U, onNone: () => U) => U;
+  match: <U>(onNone: () => U, onSome: (some: T) => U) => U;
   getOrElse: (fallback: () => T) => T;
   toNullable: () => T | null;
   filter: (predicate: (some: T) => boolean) => Option<T>;
@@ -34,7 +34,7 @@ function createOption<T>(value: OptionV<T>): Option<T> {
     },
 
     // todo: add tests
-    match: <U>(onSome: (some: T) => U, onNone: () => U) => {
+    match: <U>(onNone: () => U, onSome: (some: T) => U) => {
       return isSome(value) ? onSome(value.some) : onNone();
     },
 
@@ -101,8 +101,8 @@ export function none<T>(): Option<T> {
 export function compact<T>(options: Option<T>[]): T[] {
   return options.flatMap((o) =>
     o.match(
-      (value) => [value],
-      () => []
+      () => [],
+      (value) => [value]
     )
   );
 }
