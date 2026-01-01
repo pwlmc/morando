@@ -29,6 +29,7 @@ export type Either<E, T> = {
     onLeft: () => E
   ) => Either<E, T>;
   toResult: () => Result<E, T>;
+  tap: (effect: (right: T) => void) => Either<E, T>;
 };
 
 function createEither<E, T>(value: EitherV<E, T>): Either<E, T> {
@@ -83,6 +84,14 @@ function createEither<E, T>(value: EitherV<E, T>): Either<E, T> {
             ok: false,
             error: value.left,
           };
+    },
+
+    // todo: add tests
+    tap: (effect: (right: T) => void) => {
+      if (isRight(value)) {
+        effect(value.right);
+      }
+      return either;
     },
   };
 

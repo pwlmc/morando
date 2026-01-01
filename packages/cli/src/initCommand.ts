@@ -3,7 +3,7 @@ import listTemplates from "./template/listTemplates.js";
 import chalk from "chalk";
 import { type Either, fromNullable } from "okfp/either";
 import { CONFIG_FILE_NAME } from "./config/defs.js";
-import { existsSync } from "fs";
+import { copyFileSync, existsSync } from "fs";
 import { resolveUserPath } from "./utils/fs.js";
 import type { Argv } from "yargs";
 
@@ -72,6 +72,7 @@ export default function attachInitCommand(yargs: Argv) {
               ].join("\n")
             )
         )
+        .tap((template) => copyFileSync(template.path, destPath))
         .match<Promise<never> | void>(
           (left) => {
             if (left instanceof ValidationError) {
@@ -83,7 +84,7 @@ export default function attachInitCommand(yargs: Argv) {
             return;
           },
           () => {
-            console.log("Project initialize correctly");
+            console.info(`Project initialized successfully at ${destPath}`);
           }
         );
     }

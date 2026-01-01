@@ -1,7 +1,23 @@
 {
-    "includes": ["src/**/*.{ts,js}"],
-    "ignore": ["**/node_modules"],
-    "layers": [
-        "main"
-    ]
+  "includes": ["src/**/*.{ts,js}"],
+  "ignore": ["**/node_modules"],
+  "layers": ["main", "command", "business", "defs"],
+  "layerMatchers": [
+    {
+      "layer": "main",
+      "pattern": "index.ts"
+    },
+    {
+      "layer": "defs",
+      "pattern": "defs.ts"
+    },
+    {
+      "layer": "command",
+      "pattern": "**/*[cC]ommand.ts"
+    },
+    {
+      "layer": "business",
+      "pattern": "**/*.ts"
+    }
+  ]
 }

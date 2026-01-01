@@ -1,6 +1,6 @@
 import { readdirSync } from "fs";
 import { normalize } from "path";
-import { compact, fromNullable, type Option, some, none } from "okfp/option";
+import { compact, fromNullable, type Option } from "okfp/option";
 import { type Either } from "okfp/either";
 import { type Template } from "./defs.js";
 import { pkgRootPath } from "../utils/fs.js";
