@@ -2,12 +2,12 @@
   "includes": ["src/**/*.{ts,tsx,js,jsx}"],
   "ignores": ["**/node_modules"],
   "layers": [
-    "main",
-    "pages",
-    "components",
-    "hooks",
+    "defs",
     "business",
-    "defs"
+    "hooks",
+    "components",
+    "pages",
+    "main",
   ],
   "layerMatchers": [
     {
@@ -28,7 +28,7 @@
     },
     {
       "layer": "hooks",
-      "pattern": "**/use[A-Z0-9]+.{ts,tsx}"
+      "pattern": "**/use[A-Z0-9]+.ts"
     },
     {
       "layer": "components",
