@@ -30,6 +30,8 @@ export type Either<E, T> = {
   ) => Either<E, T>;
   toResult: () => Result<E, T>;
   tap: (effect: (right: T) => void) => Either<E, T>;
+  // todo: implement. Check if the typing works, we should be able to call .ap only when value is a function
+  ap: <A, U>(this: Either<E, (a: A) => U>, arg: Either<E, A>) => Either<E, U>;
 };
 
 function createEither<E, T>(value: EitherV<E, T>): Either<E, T> {
