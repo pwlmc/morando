@@ -1,14 +1,15 @@
 import { describe, it, expect } from "vitest";
-import { Option, some, none } from "./option.js";
-import { functorLawsSpec } from "./testUtils/functorLaws.js";
-import { monadLawsSpec } from "./testUtils/monadLaws.js";
+import { some, none } from "./constructors.js";
+import { Option } from "./option.js";
+import { functorLawsSpec } from "../testUtils/functorLaws.js";
+import { monadLawsSpec } from "../testUtils/monadLaws.js";
 
 type OptionTag<T> = { tag: "SOME"; some: T } | { tag: "NONE" };
 
 const asTag = <T>(value: Option<T>) =>
   value.match<OptionTag<T>>(
-    (some) => ({ tag: "SOME" as const, some }),
-    () => ({ tag: "NONE" as const })
+    () => ({ tag: "NONE" as const }),
+    (some) => ({ tag: "SOME" as const, some })
   );
 
 describe("option", () => {
