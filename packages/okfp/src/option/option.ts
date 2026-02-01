@@ -19,23 +19,6 @@ export type Option<T> = {
   filter: (predicate: (some: T) => boolean) => Option<T>;
 
   /**
-   * Applies a function wrapped in an Option to a value wrapped in an Option.
-   * This is useful for applying functions that are also optional.
-   *
-   * @param argOption - Option containing the argument to apply the function to
-   * @returns Option containing the result, or None if either Option is None
-   *
-   * @example
-   * ```typescript
-   * const add = (x: number) => (y: number) => x + y;
-   * some(add(5)).ap(some(3)) // Some(8)
-   * some(add(5)).ap(none())  // None
-   * none().ap(some(3))       // None
-   * ```
-   */
-  ap: <A, U>(this: Option<(arg: A) => U>, argOption: Option<A>) => Option<U>;
-
-  /**
    * Transforms the value inside the Option using a mapping function.
    * If this Option is None, returns None without calling the mapper.
    *
@@ -87,6 +70,23 @@ export type Option<T> = {
     optB: Option<B>,
     mapper: (some: T, a: A, b: B) => U
   ) => Option<U>;
+
+  /**
+   * Applies a function wrapped in an Option to a value wrapped in an Option.
+   * This is useful for applying functions that are also optional.
+   *
+   * @param argOption - Option containing the argument to apply the function to
+   * @returns Option containing the result, or None if either Option is None
+   *
+   * @example
+   * ```typescript
+   * const add = (x: number) => (y: number) => x + y;
+   * some(add(5)).ap(some(3)) // Some(8)
+   * some(add(5)).ap(none())  // None
+   * none().ap(some(3))       // None
+   * ```
+   */
+  ap: <A, U>(this: Option<(arg: A) => U>, argOption: Option<A>) => Option<U>;
 
   /**
    * Chains Option-returning operations together (monadic bind).
@@ -198,38 +198,53 @@ function isSome<T>(option: OptionV<T>): option is Some<T> {
   return typeof option === "object" && "some" in option;
 }
 
-export function createOption<T>(value: OptionV<T>): Option<T> {
+export function createOption<T>(optionValue: OptionV<T>): Option<T> {
   const option: Option<T> = {
-    filter: (predicate: (some: T) => boolean) => {
-      return isSome(value) && predicate(value.some)
-        ? option
-        : createOption(NONE);
-    },
+    filter: (predicate: (some: T) => boolean) =>
+      option.flatMap((value) =>
+        predicate(value) ? option : createOption(NONE)
+      ),
 
     map: <U>(mapper: (some: T) => U) => {
-      return isSome(value)
-        ? createOption({ some: mapper(value.some) })
+      return isSome(optionValue)
+        ? createOption({ some: mapper(optionValue.some) })
         : (option as unknown as Option<U>);
+    },
+
+    ap: function <A, U>(
+      this: Option<(arg: A) => U>,
+      argOption: Option<A>
+    ): Option<U> {
+      return this.flatMap((fn) =>
+        argOption.match(
+          () => createOption(NONE),
+          (arg) => createOption({ some: fn(arg) })
+        )
+      );
     },
 
     flatMap: <U>(mapper: (some: T) => Option<U>): Option<U> => {
-      return isSome(value)
-        ? mapper(value.some)
-        : (option as unknown as Option<U>);
+      return isSome(optionValue)
+        ? mapper(optionValue.some)
+        : forceCast<T, U>(option);
     },
 
     match: <U>(onNone: () => U, onSome: (some: T) => U) => {
-      return isSome(value) ? onSome(value.some) : onNone();
+      return isSome(optionValue) ? onSome(optionValue.some) : onNone();
     },
 
     getOrElse: (fallback: () => T) => {
-      return isSome(value) ? value.some : fallback();
+      return isSome(optionValue) ? optionValue.some : fallback();
     },
 
     toNullable: (): T | null => {
-      return isSome(value) ? value.some : null;
+      return isSome(optionValue) ? optionValue.some : null;
     },
   };
 
   return option;
+}
+
+function forceCast<T, U>(option: Option<T>): Option<U> {
+  return option as unknown as Option<U>;
 }

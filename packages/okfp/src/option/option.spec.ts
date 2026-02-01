@@ -1,8 +1,9 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { some, none } from "./constructors.js";
 import { Option } from "./option.js";
 import { functorLawsSpec } from "../testUtils/functorLaws.js";
 import { monadLawsSpec } from "../testUtils/monadLaws.js";
+import { applicativeLawsSpec } from "../testUtils/applicativeLaws.js";
 
 type OptionTag<T> = { tag: "SOME"; some: T } | { tag: "NONE" };
 
@@ -13,6 +14,46 @@ const asTag = <T>(value: Option<T>) =>
   );
 
 describe("option", () => {
+  describe("filter", () => {
+    const predicate = vi.fn().mockReturnValue(true);
+
+    it("should keep some value if the predicate returns true", () => {
+      const opt = some(1).filter(predicate);
+      expect(opt.toNullable()).toBe(1);
+    });
+
+    it("should return none if the predicate returns false", () => {
+      predicate.mockReturnValue(false);
+      const opt = some(-1).filter(predicate);
+      expect(opt.toNullable()).toBe(null);
+    });
+
+    it("should not call the predicate and return none if the value is none", () => {
+      const opt = none().filter(predicate);
+      expect(asTag(opt)).toEqual(asTag(none()));
+      expect(predicate).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("ap", () => {
+    it("should apply the value to the elevated function", () => {
+      const opt = some((num: number) => num * 2).ap(some(2));
+      expect(opt.toNullable()).toBe(4);
+    });
+
+    it("should not call the function and return none when argument option is none", () => {
+      const fn = vi.fn();
+      const opt = some(fn as (num: number) => number).ap(none());
+      expect(opt.toNullable()).toBe(null);
+      expect(fn).not.toHaveBeenCalled();
+    });
+
+    it("should return none if the option is none", () => {
+      const opt = none<(num: number) => number>().ap(some(2));
+      expect(opt.toNullable()).toBe(null);
+    });
+  });
+
   describe("map", () => {
     const mapper = (n: number) => n + 2;
 
@@ -76,6 +117,15 @@ describe("option", () => {
     functorLawsSpec<Option<number>>({
       of: (testValue) => some(testValue),
       map: (m, mapper) => m.map(mapper),
+      asTag,
+    })
+  );
+
+  describe(
+    "applicative laws",
+    applicativeLawsSpec<Option<unknown>>({
+      of: (value) => some(value),
+      ap: (opt, arg) => (opt as Option<(arg: unknown) => unknown>).ap(arg),
       asTag,
     })
   );
