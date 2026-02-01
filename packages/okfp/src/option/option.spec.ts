@@ -7,12 +7,6 @@ import { applicativeLawsSpec } from "../testUtils/applicativeLaws.js";
 
 type OptionTag<T> = { tag: "SOME"; some: T } | { tag: "NONE" };
 
-const asTag = <T>(value: Option<T>) =>
-  value.match<OptionTag<T>>(
-    () => ({ tag: "NONE" as const }),
-    (some) => ({ tag: "SOME" as const, some })
-  );
-
 describe("option", () => {
   describe("filter", () => {
     const predicate = vi.fn().mockReturnValue(true);
@@ -30,8 +24,38 @@ describe("option", () => {
 
     it("should not call the predicate and return none if the value is none", () => {
       const opt = none().filter(predicate);
-      expect(asTag(opt)).toEqual(asTag(none()));
+      expect(opt.toNullable()).toEqual(null);
       expect(predicate).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("map", () => {
+    const mapper = (n: number) => n + 2;
+
+    it("should map some values", () => {
+      const value = some(2);
+      const newValue = value.map(mapper);
+      expect(newValue.toNullable()).toEqual(4);
+    });
+
+    it("should not change the value if it is left", () => {
+      const value = none<number>();
+      const newValue = value.map(mapper);
+      expect(newValue.toNullable()).toBe(null);
+    });
+  });
+
+  describe("orElse", () => {
+    it("should not call the fallback and return the same option on some ", () => {
+      const fallback = vi.fn();
+      const opt = some(2);
+      expect(opt.orElse(fallback)).toBe(opt);
+      expect(fallback).not.toBeCalled();
+    });
+
+    it("should return the fallback option when none", () => {
+      const opt = none<number>().orElse(() => some(0));
+      expect(opt.toNullable()).toBe(0);
     });
   });
 
@@ -54,29 +78,13 @@ describe("option", () => {
     });
   });
 
-  describe("map", () => {
-    const mapper = (n: number) => n + 2;
-
-    it("should map some values", () => {
-      const value = some(2);
-      const newValue = value.map(mapper);
-      expect(asTag(newValue)).toEqual(asTag(some(4)));
-    });
-
-    it("should not change the value if it is left", () => {
-      const value = none<number>();
-      const newValue = value.map(mapper);
-      expect(newValue).toBe(value);
-    });
-  });
-
   describe("flatMap", () => {
     const mapper = (r: number) => some(r + 2);
 
     it("should map and flatten the right value", () => {
       const value = some(2);
       const newValue = value.flatMap(mapper);
-      expect(asTag(newValue)).toEqual(asTag(some(4)));
+      expect(newValue.toNullable()).toBe(4);
     });
 
     it("should not change the left value", () => {
@@ -86,10 +94,64 @@ describe("option", () => {
     });
   });
 
+  describe("tap", () => {
+    const sideEffect = vi.fn();
+
+    it("should run the side effect and return the same option on some value", () => {
+      const opt = some(2);
+      const tapOpt = opt.tap(sideEffect);
+      expect(sideEffect).toBeCalledWith(2);
+      expect(tapOpt).toBe(opt);
+    });
+
+    it("should not call the side effect and return the same option on none", () => {
+      const opt = none();
+      const tapOpt = opt.tap(sideEffect);
+      expect(sideEffect).not.toHaveBeenCalled();
+      expect(tapOpt).toBe(opt);
+    });
+  });
+
+  describe("tapNone", () => {
+    const sideEffect = vi.fn();
+
+    it("should not call the side effect and return the same option on some value", () => {
+      const opt = some(2);
+      const tapOpt = opt.tapNone(sideEffect);
+      expect(sideEffect).not.toHaveBeenCalled();
+      expect(opt).toBe(tapOpt);
+    });
+
+    it("should call the side effect and return the same option on none value", () => {
+      const opt = none();
+      const tapOpt = opt.tapNone(sideEffect);
+      expect(sideEffect).toHaveBeenCalled();
+      expect(opt).toBe(tapOpt);
+    });
+  });
+
+  describe("match", () => {
+    it("should return the mapped some", () => {
+      const res = some(1).match(
+        () => 0,
+        (value) => value + 1
+      );
+      expect(res).toBe(2);
+    });
+
+    it("should return the mapped none", () => {
+      const res = none<number>().match(
+        () => 0,
+        (value) => value + 1
+      );
+      expect(res).toBe(0);
+    });
+  });
+
   describe("getOrElse", () => {
     const fallback = () => 0;
 
-    it("should return the some value", () => {
+    it("should return some value", () => {
       const value = some(2);
       expect(value.getOrElse(fallback)).toBe(2);
     });
@@ -111,6 +173,12 @@ describe("option", () => {
       expect(value.toNullable()).toBe(null);
     });
   });
+
+  const asTag = <T>(value: Option<T>) =>
+    value.match<OptionTag<T>>(
+      () => ({ tag: "NONE" as const }),
+      (some) => ({ tag: "SOME" as const, some })
+    );
 
   describe(
     "functor laws",
