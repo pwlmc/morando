@@ -95,14 +95,8 @@ export type Option<T> = {
    *
    * @example
    * ```typescript
-   * const nested = some(some(5));
-   * nested.flatten() // Some(5)
-   *
-   * const nestedNone = some(none<number>());
-   * nestedNone.flatten() // None
-   *
-   * const outerNone = none<Option<number>>();
-   * outerNone.flatten() // None
+   * some(some(5)).flatten() // Some(5)
+   * some(none<number>()).flatten() // None
    * ```
    */
   flatten: <U>(this: Option<Option<U>>) => Option<U>;
@@ -195,6 +189,21 @@ export type Option<T> = {
    * ```
    */
   toNullable: () => T | null;
+
+  /**
+   * Converts the Option to an array.
+   * If this Option contains a value, returns an array with that single value.
+   * If this Option is None, returns an empty array.
+   *
+   * @returns Array containing the value if Some, or empty array if None
+   *
+   * @example
+   * ```typescript
+   * some(42).toArray()    // [42]
+   * none().toArray()      // []
+   * ```
+   */
+  toArray: () => readonly T[];
 };
 
 export function createOption<T>(optionValue: OptionV<T>): Option<T> {
@@ -253,6 +262,12 @@ export function createOption<T>(optionValue: OptionV<T>): Option<T> {
       option.match(
         () => null,
         (value) => value
+      ),
+
+    toArray: () =>
+      option.match(
+        () => [],
+        (val) => [val]
       ),
   };
 

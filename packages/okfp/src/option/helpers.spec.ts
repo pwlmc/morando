@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import { some, none } from "./constructors.js";
-import { map2, map3 } from "./helpers.js";
+import { map2, map3, sequence } from "./helpers.js";
 
 describe("option helpers", () => {
   describe("map2", () => {
@@ -46,6 +46,18 @@ describe("option helpers", () => {
         expect(d.toNullable()).toBe(null);
         expect(mapper).not.toBeCalled();
       }
+    });
+  });
+
+  describe("sequence", () => {
+    it("should return an option with the array of values when no none", () => {
+      const res = sequence([some(1), some(2), some(3)]);
+      expect(res.toNullable()).toEqual([1, 2, 3]);
+    });
+
+    it("should return none if one array items is none", () => {
+      const res = sequence([some(1), none<number>(), some(3)]);
+      expect(res.toNullable()).toBe(null);
     });
   });
 });

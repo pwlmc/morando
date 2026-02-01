@@ -205,6 +205,18 @@ describe("option", () => {
     });
   });
 
+  describe("toArray", () => {
+    it("should return and array with the some value ", () => {
+      const value = some(2);
+      expect(value.toArray()).toEqual([2]);
+    });
+
+    it("should return an empty array for none", () => {
+      const value = none();
+      expect(value.toArray()).toEqual([]);
+    });
+  });
+
   const asTag = <T>(value: Option<T>) =>
     value.match<OptionTag<T>>(
       () => ({ tag: "NONE" as const }),

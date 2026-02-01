@@ -1,3 +1,4 @@
+import { some, none } from "./constructors.js";
 import { Option } from "./option.js";
 
 /**
@@ -11,12 +12,9 @@ import { Option } from "./option.js";
  *
  * @example
  * ```typescript
- * const firstName = some("John");
- * const lastName = some("Doe");
- * map2(firstName, lastName, (first, last) => `${first} ${last}`) // Some("John Doe")
- *
- * const missing = none<string>();
- * map2(firstName, missing, (first, last) => `${first} ${last}`) // None
+ * const greet = (first, last) => `Hi ${first} ${last}!`
+ * map2(some("John"), some("Doe"), greet) // Some("John Doe")
+ * map2(some("John"), none<string>(), greet) // None
  * ```
  */
 export function map2<A, B, C>(
@@ -39,13 +37,9 @@ export function map2<A, B, C>(
  *
  * @example
  * ```typescript
- * const day = some(15);
- * const month = some(6);
- * const year = some(2023);
- * map3(day, month, year, (d, m, y) => `${d}/${m}/${y}`) // Some("15/6/2023")
- *
- * const missingYear = none<number>();
- * map3(day, month, missingYear, (d, m, y) => `${d}/${m}/${y}`) // None
+ * const toDateString = (d, m, y) => `${d}/${m}/${y}`
+ * map3(some(15), some(6), some(2023), toDateString) // Some("15/6/2023")
+ * map3(some(15), some(6), none<number>(), toDateString) // None
  * ```
  */
 export function map3<A, B, C, D>(
@@ -58,4 +52,32 @@ export function map3<A, B, C, D>(
     .map((a) => (b: B) => (c: C) => mapper(a, b, c))
     .ap(optB)
     .ap(optC);
+}
+
+/**
+ * Converts an array of Options into an Option of array.
+ * If all Options in the array contain values, returns Some containing an array of all values.
+ * If any Option in the array is None, returns None.
+ *
+ * @param opts - Array of Options to sequence
+ * @returns Some containing array of all values if all Options are Some, otherwise None
+ *
+ * @example
+ * ```typescript
+ * sequence([some(1), some(2), some(3)]) // Some([1, 2, 3])
+ * sequence([some(1), none(), some(3)]) // None
+ * ```
+ */
+export function sequence<T>(opts: Option<T>[]): Option<T[]> {
+  const out: T[] = [];
+
+  for (const opt of opts) {
+    const [value] = opt.toArray();
+    if (!value) {
+      return none<T[]>();
+    }
+    out.push(value);
+  }
+
+  return some(out);
 }
