@@ -78,6 +78,37 @@ describe("option", () => {
     });
   });
 
+  describe("zip", () => {
+    it("should return an option of tuple on some value", () => {
+      const opt = some(2).zip(some("two"));
+      expect(opt.toNullable()).toEqual([2, "two"]);
+    });
+
+    it("should return none when some on none", () => {
+      const opt1 = some(2).zip(none());
+      const opt2 = none().zip(some("two"));
+      expect(opt1.toNullable()).toBe(null);
+      expect(opt2.toNullable()).toBe(null);
+    });
+  });
+
+  describe("flatten", () => {
+    it("should remove one level of nesting from the option", () => {
+      const opt = some(some<number>(2));
+      expect(opt.flatten().toNullable()).toBe(2);
+    });
+
+    it("should do nothing when the option is none", () => {
+      const opt = none<Option<number>>().flatten();
+      expect(opt.toNullable()).toBe(null);
+    });
+
+    it("should return none when the inner option is none", () => {
+      const opt = some(none()).flatten();
+      expect(opt.toNullable()).toBe(null);
+    });
+  });
+
   describe("flatMap", () => {
     const mapper = (r: number) => some(r + 2);
 

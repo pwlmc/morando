@@ -66,6 +66,48 @@ export type Option<T> = {
   ap: <A, U>(this: Option<(arg: A) => U>, optA: Option<A>) => Option<U>;
 
   /**
+   * Combines this Option with another Option into a tuple.
+   * If both Options contain values, returns Some containing a tuple of both values.
+   * If either Option is None, returns None.
+   *
+   * @param optA - The Option to combine with this one
+   * @returns Option containing a tuple of both values, or None if either is None
+   *
+   * @example
+   * ```typescript
+   * const name = some("Alice");
+   * const age = some(30);
+   * name.zip(age) // Some(["Alice", 30])
+   *
+   * const missing = none<number>();
+   * name.zip(missing) // None
+   * none().zip(age)   // None
+   * ```
+   */
+  zip: <A>(optA: Option<A>) => Option<readonly [T, A]>;
+
+  /**
+   * Flattens a nested Option structure by removing one level of nesting.
+   * If this Option contains another Option, returns the inner Option.
+   * If this Option is None, returns None.
+   *
+   * @returns The inner Option if this Option contains one, or None
+   *
+   * @example
+   * ```typescript
+   * const nested = some(some(5));
+   * nested.flatten() // Some(5)
+   *
+   * const nestedNone = some(none<number>());
+   * nestedNone.flatten() // None
+   *
+   * const outerNone = none<Option<number>>();
+   * outerNone.flatten() // None
+   * ```
+   */
+  flatten: <U>(this: Option<Option<U>>) => Option<U>;
+
+  /**
    * Chains Option-returning operations together (monadic bind).
    * If this Option is Some, applies the mapper and returns the result.
    * If this Option is None, returns None without calling the mapper.
@@ -177,6 +219,13 @@ export function createOption<T>(optionValue: OptionV<T>): Option<T> {
           (arg) => createOption({ some: fn(arg) })
         )
       );
+    },
+
+    zip: <A>(optA: Option<A>) =>
+      option.map((value) => (a: A) => [value, a] as const).ap(optA),
+
+    flatten: function <U>(this: Option<Option<U>>) {
+      return this.flatMap((value) => value);
     },
 
     flatMap: <U>(mapper: (value: T) => Option<U>): Option<U> =>
