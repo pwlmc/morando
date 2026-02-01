@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from "vitest";
 import { some, none } from "./constructors.js";
 import { map2, map3 } from "./helpers.js";
 
-describe("helpers", () => {
+describe("option helpers", () => {
   describe("map2", () => {
     it("should map some values", () => {
       const a = some(2);
