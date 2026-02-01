@@ -1,6 +1,6 @@
 import { readdirSync } from "fs";
 import { normalize } from "path";
-import { compact, fromNullable, type Option } from "okfp/option";
+import { fromNullable, type Option } from "okfp/option";
 import { type Either } from "okfp/either";
 import { type Template } from "./defs.js";
 import { pkgRootPath } from "../utils/fs.js";
@@ -29,18 +29,18 @@ export default function listTemplates(
   const descriptions = Object.entries(templateWhitelist);
   return readTemplatesDir(templatesDir)
     .map((fnames) =>
-      compact(
-        fnames.map((filename) =>
+      fnames
+        .map((filename) =>
           parseTemplateFileName(filename).map((d) => ({
             ...d,
             path: normalize(templatesDir + "/" + filename),
           }))
         )
-      )
+        .flatMap((o) => o.toArray())
     )
     .map((fdata) =>
-      compact(
-        descriptions.reduce(
+      descriptions
+        .reduce(
           (acc, [name, description]) =>
             acc.concat([
               fromNullable(fdata.find((f) => f.name === name)).map(
@@ -54,7 +54,7 @@ export default function listTemplates(
             ]),
           [] as Option<Template>[]
         )
-      )
+        .flatMap((o) => o.toArray())
     );
 }
 

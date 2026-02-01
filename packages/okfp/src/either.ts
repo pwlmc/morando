@@ -115,3 +115,11 @@ export function fromNullable<E, T>(
 ): Either<E, T> {
   return nullable != null ? right<T, E>(nullable) : left<E, T>(onNullish());
 }
+
+export function traverse() {
+  throw new Error("Not implemented");
+}
+
+export function sequence() {
+  throw new Error("Not implemented");
+}

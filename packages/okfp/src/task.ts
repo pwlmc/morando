@@ -20,6 +20,10 @@ export function all() {
   throw new Error("Not implemented");
 }
 
+export function traverse() {
+  throw new Error("Not implemented");
+}
+
 export function sequence() {
   throw new Error("Not implemented");
 }

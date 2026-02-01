@@ -19,3 +19,11 @@ export function invalid<E, T = never>(): Validation<E, T> {
 export function fromEither<E, T>(either: Either<E, T>): Validation<E, T> {
   throw new Error("Not implemented");
 }
+
+export function traverse() {
+  throw new Error("Not implemented");
+}
+
+export function sequence() {
+  throw new Error("Not implemented");
+}

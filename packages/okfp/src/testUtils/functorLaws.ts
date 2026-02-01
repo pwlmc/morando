@@ -1,7 +1,7 @@
 import { expect, it } from "vitest";
 
 type FunctorApi<F> = {
-  of: (testValue: number) => F;
+  of: (value: number) => F;
   map: (f: F, mapper: (x: number) => number) => F;
   asTag: (f: F) => Record<string, unknown>;
 };
