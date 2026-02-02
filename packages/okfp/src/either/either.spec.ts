@@ -1,7 +1,8 @@
 import { describe, it, expect } from "vitest";
-import { Either, left, right } from "./either.js";
-import { monadLawsSpec } from "./testUtils/monadLaws.js";
-import { functorLawsSpec } from "./testUtils/functorLaws.js";
+import { left, right } from "./constructors.js";
+import { Either } from "./either.js";
+import { monadLawsSpec } from "../testUtils/monadLaws.js";
+import { functorLawsSpec } from "../testUtils/functorLaws.js";
 
 type EitherTag<E, T> = { tag: "RIGHT"; right: T } | { tag: "LEFT"; left: E };
 
