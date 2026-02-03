@@ -4,14 +4,6 @@ import { Either } from "./either.js";
 import { monadLawsSpec } from "../testUtils/monadLaws.js";
 import { functorLawsSpec } from "../testUtils/functorLaws.js";
 
-type EitherTag<E, T> = { tag: "RIGHT"; right: T } | { tag: "LEFT"; left: E };
-
-const asTag = <E, T>(value: Either<E, T>) =>
-  value.match<EitherTag<E, T>>(
-    (left) => ({ tag: "LEFT" as const, left }),
-    (right) => ({ tag: "RIGHT" as const, right })
-  );
-
 describe("either", () => {
   describe("getOrElse", () => {
     const onLeft = (_: Error) => 0;
@@ -33,7 +25,7 @@ describe("either", () => {
     it("should map right values", () => {
       const value = right(2);
       const newValue = value.map(mapper);
-      expect(asTag(newValue)).toEqual(asTag(right(4)));
+      expect(newValue.toResult()).toEqual(right(4).toResult());
     });
 
     it("should not change the value if it is left", () => {
@@ -49,7 +41,7 @@ describe("either", () => {
     it("should map left values", () => {
       const value = left(2);
       const newValue = value.mapLeft(mapper);
-      expect(asTag(newValue)).toEqual(asTag(left(4)));
+      expect(newValue.toResult()).toEqual(left(4).toResult());
     });
 
     it("should not change the value if it is right", () => {
@@ -65,7 +57,7 @@ describe("either", () => {
     it("should map and flatten the right value", () => {
       const value = right(2);
       const newValue = value.flatMap(mapper);
-      expect(asTag(newValue)).toEqual(asTag(right(4)));
+      expect(newValue.toResult()).toEqual(right(4).toResult());
     });
 
     it("should not change the left value", () => {
@@ -80,7 +72,7 @@ describe("either", () => {
     functorLawsSpec<Either<never, number>>({
       of: (testValue) => right(testValue),
       map: (m, mapper) => m.map(mapper),
-      asTag,
+      asTag: (m) => m.toResult(),
     })
   );
 
@@ -89,7 +81,7 @@ describe("either", () => {
     monadLawsSpec<Either<never, number>>({
       of: (testValue) => right(testValue),
       flatMap: (m, mapper) => m.flatMap(mapper),
-      asTag,
+      asTag: (m) => m.toResult(),
     })
   );
 });
