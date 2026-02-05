@@ -61,6 +61,28 @@ describe("either", () => {
     });
   });
 
+  describe("ap", () => {
+    it("should apply the value to the elevated function", () => {
+      const either = right((num: number) => num * 2).ap(right(2));
+      expect(either.toResult()).toEqual(right(4).toResult());
+    });
+
+    it("should not call the function and return none when argument option is none", () => {
+      const fn = vi.fn();
+      type F = (num: number) => number;
+      const error = new Error("some error");
+      const either = right<F, Error>(fn as F).ap(left(error));
+      expect(either.toResult()).toEqual(left(error).toResult());
+      expect(fn).not.toHaveBeenCalled();
+    });
+
+    it("should return none if the option is none", () => {
+      const error = new Error("some error");
+      const either = left<Error, (num: number) => number>(error).ap(right(2));
+      expect(either.toResult()).toEqual(left(error).toResult());
+    });
+  });
+
   describe("getOrElse", () => {
     const onLeft = (_: Error) => 0;
 

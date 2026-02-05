@@ -45,13 +45,29 @@ export type Either<E, T> = {
    * ```
    */
   map: <U>(mapper: (right: T) => U) => Either<E, U>;
-  mapLeft: <EE>(mapper: (left: E) => EE) => Either<EE, T>;
+
+  /**
+   * Applies a function wrapped in an Either to a value wrapped in an Either.
+   *
+   * @typeParam A - The type of the argument value
+   * @typeParam U - The type of the function's return value
+   * @param arg - Either containing the argument to apply the function to
+   * @returns Either containing the function result, or the first Left if any Either is Left
+   *
+   * @example
+   * ```typescript
+   * const add = (x: number) => (y: number) => x + y;
+   * right(add(5)).ap(right(3))     // Right(8)
+   * right(add(5)).ap(left("err"))  // Left("err")
+   * left("err").ap(right(3))       // Left("err")
+   * ```
+   */
   ap: <A, U>(this: Either<E, (a: A) => U>, arg: Either<E, A>) => Either<E, U>;
   zip: <A>(eitherA: Either<E, A>) => Either<E, readonly [T, A]>;
   flatten: <U>(this: Either<E, Either<E, U>>) => Either<E, U>;
   flatMap: <U>(mapper: (right: T) => Either<E, U>) => Either<E, U>;
+  swap: () => Either<T, E>;
   tap: (sideEffect: (right: T) => void) => Either<E, T>;
-  tapLeft: (sideEffect: (left: E) => void) => Either<E, T>;
   match: <U>(onLeft: (left: E) => U, onRight: (right: T) => U) => U;
   getOrElse: (onLeft: (left: E) => T) => T;
   toResult: () => Result<E, T>;
@@ -70,10 +86,8 @@ export function createEither<E, T>(value: EitherV<E, T>): Either<E, T> {
     map: <U>(mapper: (right: T) => U): Either<E, U> =>
       either.flatMap((right) => createEither({ right: mapper(right) })),
 
-    mapLeft: <EE>(mapper: (left: E) => EE): Either<EE, T> => {
-      return isLeft(value)
-        ? createEither({ left: mapper(value.left) })
-        : (either as unknown as Either<EE, T>);
+    ap: function <A, U>(this: Either<E, (a: A) => U>, arg: Either<E, A>) {
+      return this.flatMap((fn) => arg.map((right) => fn(right)));
     },
 
     getOrElse: (onLeft: (left: E) => T) =>
