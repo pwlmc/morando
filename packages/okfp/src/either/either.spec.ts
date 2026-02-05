@@ -39,6 +39,28 @@ describe("either", () => {
     });
   });
 
+  describe("map", () => {
+    const mapper = (n: number) => n + 2;
+
+    it("should map right value", () => {
+      const value = right(2);
+      const newValue = value.map(mapper);
+      expect(newValue.toResult()).toEqual(right(4).toResult());
+    });
+
+    it("should not change the left value", () => {
+      const value = left(new Error("Test error"));
+      const newValue = value.map(mapper);
+      expect(newValue).toBe(value);
+    });
+
+    it("should not call the mapper when value is left", () => {
+      const mapper = vi.fn();
+      left(new Error("Test error")).map(mapper);
+      expect(mapper).not.toHaveBeenCalled();
+    });
+  });
+
   describe("getOrElse", () => {
     const onLeft = (_: Error) => 0;
 
@@ -50,22 +72,6 @@ describe("either", () => {
     it("should map the left value", () => {
       const value = left<Error, number>(new Error("test error"));
       expect(value.getOrElse(onLeft)).toBe(0);
-    });
-  });
-
-  describe("map", () => {
-    const mapper = (n: number) => n + 2;
-
-    it("should map right values", () => {
-      const value = right(2);
-      const newValue = value.map(mapper);
-      expect(newValue.toResult()).toEqual(right(4).toResult());
-    });
-
-    it("should not change the value if it is left", () => {
-      const value = left(new Error("Test error"));
-      const newValue = value.map(mapper);
-      expect(newValue).toBe(value);
     });
   });
 

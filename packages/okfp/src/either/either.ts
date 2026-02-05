@@ -30,6 +30,20 @@ export type Either<E, T> = {
     predicate: (right: T) => boolean,
     onLeft: () => E
   ) => Either<E, T>;
+
+  /**
+   * Transforms the Right value using a mapping function.
+   *
+   * @typeParam U - The type of the transformed value
+   * @param mapper - Function to transform the Right value
+   * @returns New Either with the transformed Right value, or the same Left if error
+   *
+   * @example
+   * ```typescript
+   * right(5).map(x => x * 2)        // Right(10)
+   * left("error").map(x => x * 2)   // Left("error")
+   * ```
+   */
   map: <U>(mapper: (right: T) => U) => Either<E, U>;
   mapLeft: <EE>(mapper: (left: E) => EE) => Either<EE, T>;
   ap: <A, U>(this: Either<E, (a: A) => U>, arg: Either<E, A>) => Either<E, U>;
@@ -53,11 +67,8 @@ export function createEither<E, T>(value: EitherV<E, T>): Either<E, T> {
         predicate(right) ? either : createEither({ left: onLeft() })
       ),
 
-    map: <U>(mapper: (right: T) => U): Either<E, U> => {
-      return isRight(value)
-        ? createEither({ right: mapper(value.right) })
-        : (either as unknown as Either<E, U>);
-    },
+    map: <U>(mapper: (right: T) => U): Either<E, U> =>
+      either.flatMap((right) => createEither({ right: mapper(right) })),
 
     mapLeft: <EE>(mapper: (left: E) => EE): Either<EE, T> => {
       return isLeft(value)
