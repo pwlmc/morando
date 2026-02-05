@@ -1,13 +1,5 @@
 import { EitherV, Left, Right } from "./defs.js";
 
-function isLeft<E, T>(value: EitherV<E, T>): value is Left<E> {
-  return typeof value === "object" && "left" in value;
-}
-
-function isRight<E, T>(value: EitherV<E, T>): value is Right<T> {
-  return typeof value === "object" && "right" in value;
-}
-
 export type Result<E, T> = { ok: true; value: T } | { ok: false; error: E };
 
 export type Either<E, T> = {
@@ -82,6 +74,17 @@ export type Either<E, T> = {
     arg: Either<EE, A>
   ) => Either<E | EE, U>;
 
+  /**
+   * Swaps the Left and Right sides of the Either.
+   *
+   * @returns Either with Left and Right sides swapped
+   *
+   * @example
+   * ```typescript
+   * right(42).swap()        // Left(42)
+   * left("error").swap()    // Right("error")
+   * ```
+   */
   swap: () => Either<T, E>;
 
   zip: <EE, A>(eitherA: Either<EE, A>) => Either<E | EE, readonly [T, A]>;
@@ -159,6 +162,14 @@ export function createEither<E, T>(value: EitherV<E, T>): Either<E, T> {
   };
 
   return either;
+}
+
+function isLeft<E, T>(value: EitherV<E, T>): value is Left<E> {
+  return typeof value === "object" && "left" in value;
+}
+
+function isRight<E, T>(value: EitherV<E, T>): value is Right<T> {
+  return typeof value === "object" && "right" in value;
 }
 
 function forceCast<E, T, EE, TT>(either: Either<E, T>) {

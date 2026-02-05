@@ -3,6 +3,7 @@ import { left, right } from "./constructors.js";
 import { Either } from "./either.js";
 import { monadLawsSpec } from "../testUtils/monadLaws.js";
 import { functorLawsSpec } from "../testUtils/functorLaws.js";
+import { applicativeLawsSpec } from "../testUtils/applicativeLaws.js";
 
 describe("either", () => {
   describe("filterOrElse", () => {
@@ -102,6 +103,13 @@ describe("either", () => {
     });
   });
 
+  describe("swap", () => {
+    it("should reverse the order of left and right", () => {
+      expect(right(2).swap().toResult()).toEqual(left(2).toResult());
+      expect(left(2).swap().toResult()).toEqual(right(2).toResult());
+    });
+  });
+
   describe("getOrElse", () => {
     const onLeft = (_: Error) => 0;
 
@@ -135,16 +143,26 @@ describe("either", () => {
   describe(
     "functor laws",
     functorLawsSpec<Either<never, number>>({
-      of: (testValue) => right(testValue),
+      of: (value) => right(value),
       map: (m, mapper) => m.map(mapper),
       asTag: (m) => m.toResult(),
     })
   );
 
   describe(
+    "applicative laws",
+    applicativeLawsSpec<Either<never, unknown>>({
+      of: (value) => right(value),
+      ap: (opt, arg) =>
+        (opt as Either<never, (arg: unknown) => unknown>).ap(arg),
+      asTag: (e) => e.toResult(),
+    })
+  );
+
+  describe(
     "monad laws",
     monadLawsSpec<Either<never, number>>({
-      of: (testValue) => right(testValue),
+      of: (value) => right(value),
       flatMap: (m, mapper) => m.flatMap(mapper),
       asTag: (m) => m.toResult(),
     })
