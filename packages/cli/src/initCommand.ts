@@ -47,7 +47,7 @@ export default function attachInitCommand(yargs: Argv) {
             list ? Boolean(templates.forEach(printTemplate)) : true,
           () => ABORT_SIGNAL
         )
-        .flatMap<Template>((templates) =>
+        .flatMap((templates) =>
           fromNullable(
             templates.find((t) => t.name === template),
             () =>
