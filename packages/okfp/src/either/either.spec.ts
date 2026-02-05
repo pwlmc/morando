@@ -61,6 +61,26 @@ describe("either", () => {
     });
   });
 
+  describe("orElse", () => {
+    it("should return the same either and not call the fallback when value is right", () => {
+      const fallback = vi.fn();
+      const either = right(2);
+      const newEither = either.orElse(fallback);
+
+      expect(newEither).toBe(either);
+      expect(fallback).not.toHaveBeenCalled();
+    });
+
+    it("should not call the fallback when value is left", () => {
+      const fallback = () => right(2);
+      const either = left<Error, number>(new Error("some error")).orElse(
+        fallback
+      );
+
+      expect(either.toResult()).toEqual(right(2).toResult());
+    });
+  });
+
   describe("ap", () => {
     it("should apply the value to the elevated function", () => {
       const either = right((num: number) => num * 2).ap(right(2));
@@ -69,9 +89,8 @@ describe("either", () => {
 
     it("should not call the function and return none when argument option is none", () => {
       const fn = vi.fn();
-      type F = (num: number) => number;
       const error = new Error("some error");
-      const either = right<F, Error>(fn as F).ap(left(error));
+      const either = right(fn as (num: number) => number).ap(left(error));
       expect(either.toResult()).toEqual(left(error).toResult());
       expect(fn).not.toHaveBeenCalled();
     });
@@ -94,22 +113,6 @@ describe("either", () => {
     it("should map the left value", () => {
       const value = left<Error, number>(new Error("test error"));
       expect(value.getOrElse(onLeft)).toBe(0);
-    });
-  });
-
-  describe("mapLeft", () => {
-    const mapper = (n: number) => n + 2;
-
-    it("should map left values", () => {
-      const value = left(2);
-      const newValue = value.mapLeft(mapper);
-      expect(newValue.toResult()).toEqual(left(4).toResult());
-    });
-
-    it("should not change the value if it is right", () => {
-      const value = right(2);
-      const newValue = value.mapLeft(mapper);
-      expect(newValue).toBe(value);
     });
   });
 

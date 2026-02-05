@@ -47,6 +47,21 @@ export type Either<E, T> = {
   map: <U>(mapper: (right: T) => U) => Either<E, U>;
 
   /**
+   * Returns this Either if it's Right, otherwise returns the result of the fallback function.
+   *
+   * @typeParam EE - The type of the error in the fallback Either
+   * @param fallback - Function that takes the Left value and returns an alternative Either
+   * @returns This Either if Right, otherwise the Either returned by the fallback function
+   *
+   * @example
+   * ```typescript
+   * right(42).orElse((err) => right(0))           // Right(42)
+   * left("error").orElse((err) => right(0))       // Right(0)
+   * ```
+   */
+  orElse: <EE>(fallback: (left: E) => Either<EE, T>) => Either<E | EE, T>;
+
+  /**
    * Applies a function wrapped in an Either to a value wrapped in an Either.
    *
    * @typeParam A - The type of the argument value
@@ -62,23 +77,31 @@ export type Either<E, T> = {
    * left("err").ap(right(3))       // Left("err")
    * ```
    */
-  ap: <A, U>(this: Either<E, (a: A) => U>, arg: Either<E, A>) => Either<E, U>;
-  zip: <A>(eitherA: Either<E, A>) => Either<E, readonly [T, A]>;
-  flatten: <U>(this: Either<E, Either<E, U>>) => Either<E, U>;
-  flatMap: <U>(mapper: (right: T) => Either<E, U>) => Either<E, U>;
+  ap: <EE, A, U>(
+    this: Either<E, (a: A) => U>,
+    arg: Either<EE, A>
+  ) => Either<E | EE, U>;
+
   swap: () => Either<T, E>;
+
+  zip: <EE, A>(eitherA: Either<EE, A>) => Either<E | EE, readonly [T, A]>;
+
+  flatten: <EE, U>(this: Either<E, Either<EE, U>>) => Either<E | EE, U>;
+
+  flatMap: <EE, U>(mapper: (right: T) => Either<EE, U>) => Either<E | EE, U>;
+
   tap: (sideEffect: (right: T) => void) => Either<E, T>;
+
   match: <U>(onLeft: (left: E) => U, onRight: (right: T) => U) => U;
+
   getOrElse: (onLeft: (left: E) => T) => T;
+
   toResult: () => Result<E, T>;
 };
 
 export function createEither<E, T>(value: EitherV<E, T>): Either<E, T> {
   const either: Either<E, T> = {
-    filterOrElse: (
-      predicate: (right: T) => boolean,
-      onLeft: () => E
-    ): Either<E, T> =>
+    filterOrElse: (predicate: (right: T) => boolean, onLeft: () => E) =>
       either.flatMap((right) =>
         predicate(right) ? either : createEither({ left: onLeft() })
       ),
@@ -86,9 +109,21 @@ export function createEither<E, T>(value: EitherV<E, T>): Either<E, T> {
     map: <U>(mapper: (right: T) => U): Either<E, U> =>
       either.flatMap((right) => createEither({ right: mapper(right) })),
 
-    ap: function <A, U>(this: Either<E, (a: A) => U>, arg: Either<E, A>) {
+    orElse: <EE>(fallback: (left: E) => Either<EE, T>) =>
+      either.match(
+        (left) => forceCast<EE, T, E | EE, T>(fallback(left)),
+        () => forceCast<E, T, E | EE, T>(either)
+      ),
+
+    ap: function <EE, A, U>(this: Either<E, (a: A) => U>, arg: Either<EE, A>) {
       return this.flatMap((fn) => arg.map((right) => fn(right)));
     },
+
+    swap: () =>
+      either.match(
+        (left) => createEither<T, E>({ right: left }),
+        (right) => createEither<T, E>({ left: right })
+      ),
 
     getOrElse: (onLeft: (left: E) => T) =>
       isRight(value) ? value.right : onLeft(value.left),
@@ -97,10 +132,8 @@ export function createEither<E, T>(value: EitherV<E, T>): Either<E, T> {
       return isLeft(value) ? onLeft(value.left) : onRight(value.right);
     },
 
-    flatMap: <U>(mapper: (right: T) => Either<E, U>): Either<E, U> => {
-      return isRight(value)
-        ? mapper(value.right)
-        : (either as unknown as Either<E | E, U>);
+    flatMap: <EE, U>(mapper: (right: T) => Either<EE, U>) => {
+      return isRight(value) ? mapper(value.right) : either;
     },
 
     // todo: add tests
@@ -126,4 +159,8 @@ export function createEither<E, T>(value: EitherV<E, T>): Either<E, T> {
   };
 
   return either;
+}
+
+function forceCast<E, T, EE, TT>(either: Either<E, T>) {
+  return either as unknown as Either<EE, TT>;
 }
