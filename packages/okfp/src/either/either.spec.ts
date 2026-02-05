@@ -1,10 +1,44 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { left, right } from "./constructors.js";
 import { Either } from "./either.js";
 import { monadLawsSpec } from "../testUtils/monadLaws.js";
 import { functorLawsSpec } from "../testUtils/functorLaws.js";
 
 describe("either", () => {
+  describe("filterOrElse", () => {
+    it("should return the same either when predicate returns true", () => {
+      const either = right<number, Error>(2);
+      const error = new Error("Value is negative");
+      const newEither = either.filterOrElse(
+        (x) => x >= 0,
+        () => error
+      );
+
+      expect(newEither).toBe(either);
+    });
+
+    it("should return left when predicate returns false", () => {
+      const either = right<number, Error>(-2);
+      const error = new Error("Value is negative");
+      const newEither = either.filterOrElse(
+        (x) => x >= 0,
+        () => error
+      );
+
+      expect(newEither.toResult()).toEqual(left(error).toResult());
+    });
+
+    it("should not call the predicate when value is left", () => {
+      const error = new Error("some error");
+      const either = left(error);
+      const predicate = vi.fn();
+      const newEither = either.filterOrElse(predicate, () => error);
+
+      expect(newEither).toBe(either);
+      expect(predicate).not.toBeCalled();
+    });
+  });
+
   describe("getOrElse", () => {
     const onLeft = (_: Error) => 0;
 
