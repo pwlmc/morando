@@ -84,7 +84,7 @@ describe("option", () => {
       expect(opt.toNullable()).toEqual([2, "two"]);
     });
 
-    it("should return none when some on none", () => {
+    it("should return none on none", () => {
       const opt1 = some(2).zip(none());
       const opt2 = none().zip(some("two"));
       expect(opt1.toNullable()).toBe(null);

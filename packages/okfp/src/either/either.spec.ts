@@ -110,6 +110,28 @@ describe("either", () => {
     });
   });
 
+  describe("zip", () => {
+    it("should return an option of tuple on right value", () => {
+      const either = right(2).zip(right("two"));
+      expect(either.toResult()).toEqual(right([2, "two"]).toResult());
+    });
+
+    it("should return left on left", () => {
+      const error = new Error("test error");
+      const either1 = right(2).zip(left(error));
+      const either2 = left(error).zip(right(2));
+      expect(either1.toResult()).toEqual(left(error).toResult());
+      expect(either2.toResult()).toEqual(left(error).toResult());
+    });
+
+    it("should return the first left", () => {
+      const error1 = new Error("first error");
+      const error2 = new Error("second error");
+      const either = left(error1).zip(left(error2));
+      expect(either.toResult()).toEqual(left(error1).toResult());
+    });
+  });
+
   describe("getOrElse", () => {
     const onLeft = (_: Error) => 0;
 
