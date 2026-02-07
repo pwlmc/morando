@@ -140,12 +140,77 @@ export type Either<E, T> = {
    */
   flatMap: <EE, U>(mapper: (right: T) => Either<EE, U>) => Either<E | EE, U>;
 
+  /**
+   * Performs a side effect if this Either is Right, returning the original Either unchanged.
+   * If this Either is Left, the side effect is not executed and the Either is returned as-is.
+   *
+   * @param sideEffect - Function to execute with the Right value (return value is ignored)
+   * @returns The same Either instance unchanged
+   *
+   * @example
+   * ```typescript
+   * right(42)
+   *   .tap(value => console.log(`Got value: ${value}`)) // Logs: "Got value: 42"
+   * left("error")
+   *   .tap(value => console.log(`Got value: ${value}`)) // No log output
+   *
+   * ```
+   */
   tap: (sideEffect: (right: T) => void) => Either<E, T>;
 
+  /**
+   * Pattern matches on the Either, executing different functions based on its state.
+   *
+   * @typeParam U - The return type of both matcher functions
+   * @param onLeft - Function to execute if Either is Left, receives the Left value
+   * @param onRight - Function to execute if Either is Right, receives the Right value
+   * @returns The result of the executed function
+   *
+   * @example
+   * ```typescript
+   * right(42).match(
+   *   (err) => `Error: ${err}`,
+   *   (val) => `Value: ${val}`
+   * ) // "Value: 42"
+   *
+   * left("Not a number").match(
+   *   (err) => `Error: ${err}`,
+   *   (val) => `Value: ${val}`
+   * ) // "Error: Not a number"
+   * ```
+   */
   match: <U>(onLeft: (left: E) => U, onRight: (right: T) => U) => U;
 
-  getOrElse: (onLeft: (left: E) => T) => T;
+  /**
+   * Extracts the Right value from the Either, or returns a fallback value if Left.
+   *
+   * @param fallback - Function that takes the Left value and returns a default value of type T
+   * @returns The Right value if present, otherwise the result of the fallback function
+   *
+   * @example
+   * ```typescript
+   * right(42).getOrElse((err) => 0)           // 42
+   * left("error").getOrElse((err) => 0)       // 0
+   * ```
+   */
+  getOrElse: (fallback: (left: E) => T) => T;
 
+  /**
+   * Converts the Either to a Result type, which is an object with `ok` and `error` or `value` properties.
+   *
+   * @returns A Result object representing the Either's state
+   *
+   * @example
+   * ```typescript
+   * const result = right(42).toResult();
+   * console.log(result.ok); // true
+   * console.log(result.value); // 42
+   *
+   * const errorResult = left("error").toResult();
+   * console.log(errorResult.ok); // false
+   * console.log(errorResult.error); // "error"
+   * ```
+   */
   toResult: () => Result<E, T>;
 };
 
@@ -188,33 +253,31 @@ export function createEither<E, T>(value: EitherV<E, T>): Either<E, T> {
         (right) => forceCast<EE, U, EE | E, U>(mapper(right))
       ),
 
-    // todo: add tests
-    tap: (effect: (right: T) => void) => {
-      if (isRight(value)) {
-        effect(value.right);
-      }
+    tap: (sideEffect) => {
+      either.match(() => {}, sideEffect);
       return either;
     },
 
-    match: <U>(onLeft: (left: E) => U, onRight: (right: T) => U) => {
-      return isLeft(value) ? onLeft(value.left) : onRight(value.right);
-    },
+    match: <U>(onLeft: (left: E) => U, onRight: (right: T) => U) =>
+      isLeft(value) ? onLeft(value.left) : onRight(value.right),
 
-    getOrElse: (onLeft: (left: E) => T) =>
-      isRight(value) ? value.right : onLeft(value.left),
+    getOrElse: (fallback) =>
+      either.match(
+        (error) => fallback(error),
+        (value) => value
+      ),
 
-    // todo: add tests
-    toResult: (): Result<E, T> => {
-      return isRight(value)
-        ? {
-            ok: true,
-            value: value.right,
-          }
-        : {
-            ok: false,
-            error: value.left,
-          };
-    },
+    toResult: () =>
+      either.match<Result<E, T>>(
+        (error) => ({
+          ok: false,
+          error,
+        }),
+        (value) => ({
+          ok: true,
+          value,
+        })
+      ),
   };
 
   return either;
@@ -222,10 +285,6 @@ export function createEither<E, T>(value: EitherV<E, T>): Either<E, T> {
 
 function isLeft<E, T>(value: EitherV<E, T>): value is Left<E> {
   return typeof value === "object" && "left" in value;
-}
-
-function isRight<E, T>(value: EitherV<E, T>): value is Right<T> {
-  return typeof value === "object" && "right" in value;
 }
 
 function forceCast<E, T, EE, TT>(either: Either<E, T>) {
