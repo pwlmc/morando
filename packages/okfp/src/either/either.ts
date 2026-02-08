@@ -90,8 +90,8 @@ export type Either<E, T> = {
   /**
    * Combines this Either with another Either into a tuple.
    *
-   * @typeParam EE - The error type of the Either to combine with
-   * @typeParam A - The success type of the Either to combine with
+   * @typeParam EE - Left type of the Either to combine with
+   * @typeParam A - Right type of the Either to combine with
    * @param eitherA - The Either to combine with this one
    * @returns Either containing a tuple of both Right values, or the first Left if any Either is Left
    *
@@ -104,6 +104,20 @@ export type Either<E, T> = {
    */
   zip: <EE, A>(eitherA: Either<EE, A>) => Either<E | EE, readonly [T, A]>;
 
+  /**
+   * Flattens a nested Either structure by removing one level of nesting.
+   *
+   * @typeParam EE - Left type of the inner Either
+   * @typeParam U - Right type of the inner Either
+   * @returns The inner Either if this Either is Right, otherwise this Either unchanged
+   *
+   * @example
+   * ```typescript
+   * right(right(42)).flatten() // Right(42)
+   * right(left("inner error")).flatten() // Left("inner error")
+   *
+   * ```
+   */
   flatten: <EE, U>(this: Either<E, Either<EE, U>>) => Either<E | EE, U>;
 
   flatMap: <EE, U>(mapper: (right: T) => Either<EE, U>) => Either<E | EE, U>;
@@ -145,6 +159,10 @@ export function createEither<E, T>(value: EitherV<E, T>): Either<E, T> {
 
     zip: <EE, A>(eitherA: Either<EE, A>) =>
       either.map((value) => (a: A) => [value, a] as const).ap(eitherA),
+
+    flatten: function <EE, U>(this: Either<E, Either<EE, U>>) {
+      return this.flatMap((value) => value);
+    },
 
     getOrElse: (onLeft: (left: E) => T) =>
       isRight(value) ? value.right : onLeft(value.left),

@@ -132,6 +132,25 @@ describe("either", () => {
     });
   });
 
+  describe("flatten", () => {
+    it("should remove one level of nesting from either", () => {
+      const either = right(right(2));
+      expect(either.flatten().toResult()).toEqual(right(2).toResult());
+    });
+
+    it("should do nothing when on left", () => {
+      const error = new Error("test error");
+      const either = left<Error, Either<Error, number>>(error).flatten();
+      expect(either.toResult()).toEqual(left(error).toResult());
+    });
+
+    it("should return none when the inner either is none", () => {
+      const error = new Error("test error");
+      const either = right(left(error)).flatten();
+      expect(either.toResult()).toEqual(left(error).toResult());
+    });
+  });
+
   describe("getOrElse", () => {
     const onLeft = (_: Error) => 0;
 

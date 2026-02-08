@@ -93,12 +93,12 @@ describe("option", () => {
   });
 
   describe("flatten", () => {
-    it("should remove one level of nesting from the option", () => {
+    it("should remove one level of nesting from option", () => {
       const opt = some(some<number>(2));
       expect(opt.flatten().toNullable()).toBe(2);
     });
 
-    it("should do nothing when the option is none", () => {
+    it("should do nothing on none", () => {
       const opt = none<Option<number>>().flatten();
       expect(opt.toNullable()).toBe(null);
     });
