@@ -120,6 +120,24 @@ export type Either<E, T> = {
    */
   flatten: <EE, U>(this: Either<E, Either<EE, U>>) => Either<E | EE, U>;
 
+  /**
+   * Chains Either-returning operations together (monadic bind).
+   *
+   * @typeParam EE - The error type of the Either returned by the mapper
+   * @typeParam U - The success type of the Either returned by the mapper
+   * @param mapper - Function that takes a Right value and returns an Either
+   * @returns The Either returned by mapper if this Either is Right, otherwise this Either unchanged
+   *
+   * @example
+   * ```typescript
+   * const safeDivide = (x: number, y: number) =>
+   *   y === 0 ? left("Division by zero") : right(x / y);
+   *
+   * right(10).flatMap(x => safeDivide(x, 2))  // Right(5)
+   * right(10).flatMap(x => safeDivide(x, 0))  // Left("Division by zero")
+   * left("error").flatMap(x => safeDivide(x, 2)) // Left("error") - mapper not called
+   * ```
+   */
   flatMap: <EE, U>(mapper: (right: T) => Either<EE, U>) => Either<E | EE, U>;
 
   tap: (sideEffect: (right: T) => void) => Either<E, T>;
@@ -164,16 +182,26 @@ export function createEither<E, T>(value: EitherV<E, T>): Either<E, T> {
       return this.flatMap((value) => value);
     },
 
-    getOrElse: (onLeft: (left: E) => T) =>
-      isRight(value) ? value.right : onLeft(value.left),
+    flatMap: <EE, U>(mapper: (right: T) => Either<EE, U>) =>
+      either.match(
+        () => forceCast<E, T, E | EE, U>(either),
+        (right) => forceCast<EE, U, EE | E, U>(mapper(right))
+      ),
+
+    // todo: add tests
+    tap: (effect: (right: T) => void) => {
+      if (isRight(value)) {
+        effect(value.right);
+      }
+      return either;
+    },
 
     match: <U>(onLeft: (left: E) => U, onRight: (right: T) => U) => {
       return isLeft(value) ? onLeft(value.left) : onRight(value.right);
     },
 
-    flatMap: <EE, U>(mapper: (right: T) => Either<EE, U>) => {
-      return isRight(value) ? mapper(value.right) : either;
-    },
+    getOrElse: (onLeft: (left: E) => T) =>
+      isRight(value) ? value.right : onLeft(value.left),
 
     // todo: add tests
     toResult: (): Result<E, T> => {
@@ -186,14 +214,6 @@ export function createEither<E, T>(value: EitherV<E, T>): Either<E, T> {
             ok: false,
             error: value.left,
           };
-    },
-
-    // todo: add tests
-    tap: (effect: (right: T) => void) => {
-      if (isRight(value)) {
-        effect(value.right);
-      }
-      return either;
     },
   };
 

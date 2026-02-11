@@ -151,20 +151,6 @@ describe("either", () => {
     });
   });
 
-  describe("getOrElse", () => {
-    const onLeft = (_: Error) => 0;
-
-    it("should return the right value", () => {
-      const value = right(2);
-      expect(value.getOrElse(onLeft)).toBe(2);
-    });
-
-    it("should map the left value", () => {
-      const value = left<Error, number>(new Error("test error"));
-      expect(value.getOrElse(onLeft)).toBe(0);
-    });
-  });
-
   describe("flatMap", () => {
     const mapper = (r: number) => right(r + 2);
 
@@ -178,6 +164,20 @@ describe("either", () => {
       const value = left(new Error("test error"));
       const newValue = value.flatMap(mapper);
       expect(newValue).toBe(value);
+    });
+  });
+
+  describe("getOrElse", () => {
+    const onLeft = (_: Error) => 0;
+
+    it("should return the right value", () => {
+      const value = right(2);
+      expect(value.getOrElse(onLeft)).toBe(2);
+    });
+
+    it("should map the left value", () => {
+      const value = left<Error, number>(new Error("test error"));
+      expect(value.getOrElse(onLeft)).toBe(0);
     });
   });
 
