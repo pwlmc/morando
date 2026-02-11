@@ -87,10 +87,57 @@ export type Either<E, T> = {
    */
   swap: () => Either<T, E>;
 
+  /**
+   * Combines this Either with another Either into a tuple.
+   *
+   * @typeParam EE - Left type of the Either to combine with
+   * @typeParam A - Right type of the Either to combine with
+   * @param eitherA - The Either to combine with this one
+   * @returns Either containing a tuple of both Right values, or the first Left if any Either is Left
+   *
+   * @example
+   * ```typescript
+   * right("Alice").zip(right(30))        // Right(["Alice", 30])
+   * right("Alice").zip(left("No age"))   // Left("No age")
+   * left("No name").zip(right(30))       // Left("No name")
+   * ```
+   */
   zip: <EE, A>(eitherA: Either<EE, A>) => Either<E | EE, readonly [T, A]>;
 
+  /**
+   * Flattens a nested Either structure by removing one level of nesting.
+   *
+   * @typeParam EE - Left type of the inner Either
+   * @typeParam U - Right type of the inner Either
+   * @returns The inner Either if this Either is Right, otherwise this Either unchanged
+   *
+   * @example
+   * ```typescript
+   * right(right(42)).flatten() // Right(42)
+   * right(left("inner error")).flatten() // Left("inner error")
+   *
+   * ```
+   */
   flatten: <EE, U>(this: Either<E, Either<EE, U>>) => Either<E | EE, U>;
 
+  /**
+   * Chains Either-returning operations together (monadic bind).
+   *
+   * @typeParam EE - The error type of the Either returned by the mapper
+   * @typeParam U - The success type of the Either returned by the mapper
+   * @param mapper - Function that takes a Right value and returns an Either
+   * @returns The Either returned by mapper if this Either is Right, otherwise this Either unchanged
+   *
+   * @example
+   * ```typescript
+   * const safeDivide = (x: number, y: number) =>
+   *   y === 0 ? left("Division by zero") : right(x / y);
+   *
+   * right(10).flatMap(x => safeDivide(x, 2))  // Right(5)
+   * right(10).flatMap(x => safeDivide(x, 0))  // Left("Division by zero")
+   * left("error").flatMap(x => safeDivide(x, 2)) // Left("error") - mapper not called
+   * ```
+   */
   flatMap: <EE, U>(mapper: (right: T) => Either<EE, U>) => Either<E | EE, U>;
 
   tap: (sideEffect: (right: T) => void) => Either<E, T>;
@@ -128,16 +175,33 @@ export function createEither<E, T>(value: EitherV<E, T>): Either<E, T> {
         (right) => createEither<T, E>({ left: right })
       ),
 
-    getOrElse: (onLeft: (left: E) => T) =>
-      isRight(value) ? value.right : onLeft(value.left),
+    zip: <EE, A>(eitherA: Either<EE, A>) =>
+      either.map((value) => (a: A) => [value, a] as const).ap(eitherA),
+
+    flatten: function <EE, U>(this: Either<E, Either<EE, U>>) {
+      return this.flatMap((value) => value);
+    },
+
+    flatMap: <EE, U>(mapper: (right: T) => Either<EE, U>) =>
+      either.match(
+        () => forceCast<E, T, E | EE, U>(either),
+        (right) => forceCast<EE, U, EE | E, U>(mapper(right))
+      ),
+
+    // todo: add tests
+    tap: (effect: (right: T) => void) => {
+      if (isRight(value)) {
+        effect(value.right);
+      }
+      return either;
+    },
 
     match: <U>(onLeft: (left: E) => U, onRight: (right: T) => U) => {
       return isLeft(value) ? onLeft(value.left) : onRight(value.right);
     },
 
-    flatMap: <EE, U>(mapper: (right: T) => Either<EE, U>) => {
-      return isRight(value) ? mapper(value.right) : either;
-    },
+    getOrElse: (onLeft: (left: E) => T) =>
+      isRight(value) ? value.right : onLeft(value.left),
 
     // todo: add tests
     toResult: (): Result<E, T> => {
@@ -150,14 +214,6 @@ export function createEither<E, T>(value: EitherV<E, T>): Either<E, T> {
             ok: false,
             error: value.left,
           };
-    },
-
-    // todo: add tests
-    tap: (effect: (right: T) => void) => {
-      if (isRight(value)) {
-        effect(value.right);
-      }
-      return either;
     },
   };
 
