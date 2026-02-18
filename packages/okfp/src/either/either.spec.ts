@@ -88,7 +88,7 @@ describe("either", () => {
       expect(either.toResult()).toEqual(right(4).toResult());
     });
 
-    it("should not call the function and return none when argument option is none", () => {
+    it("should not call the function and return left when argument either is left", () => {
       const fn = vi.fn();
       const error = new Error("some error");
       const either = right(fn as (num: number) => number).ap(left(error));
@@ -96,7 +96,7 @@ describe("either", () => {
       expect(fn).not.toHaveBeenCalled();
     });
 
-    it("should return none if the option is none", () => {
+    it("should return left if the either is left", () => {
       const error = new Error("some error");
       const either = left<Error, (num: number) => number>(error).ap(right(2));
       expect(either.toResult()).toEqual(left(error).toResult());
@@ -111,7 +111,7 @@ describe("either", () => {
   });
 
   describe("zip", () => {
-    it("should return an option of tuple on right value", () => {
+    it("should return an either of tuple on right value", () => {
       const either = right(2).zip(right("two"));
       expect(either.toResult()).toEqual(right([2, "two"]).toResult());
     });
@@ -144,7 +144,7 @@ describe("either", () => {
       expect(either.toResult()).toEqual(left(error).toResult());
     });
 
-    it("should return none when the inner either is none", () => {
+    it("should return left when the inner either is left", () => {
       const error = new Error("test error");
       const either = right(left(error)).flatten();
       expect(either.toResult()).toEqual(left(error).toResult());
@@ -247,8 +247,8 @@ describe("either", () => {
     "applicative laws",
     applicativeLawsSpec<Either<never, unknown>>({
       of: (value) => right(value),
-      ap: (opt, arg) =>
-        (opt as Either<never, (arg: unknown) => unknown>).ap(arg),
+      ap: (either, arg) =>
+        (either as Either<never, (arg: unknown) => unknown>).ap(arg),
       asTag: (e) => e.toResult(),
     })
   );
