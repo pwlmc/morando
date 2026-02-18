@@ -88,7 +88,7 @@ describe("either", () => {
       expect(either.toResult()).toEqual(right(4).toResult());
     });
 
-    it("should not call the function and return none when argument option is none", () => {
+    it("should not call the function and return left when argument either is left", () => {
       const fn = vi.fn();
       const error = new Error("some error");
       const either = right(fn as (num: number) => number).ap(left(error));
@@ -96,7 +96,7 @@ describe("either", () => {
       expect(fn).not.toHaveBeenCalled();
     });
 
-    it("should return none if the option is none", () => {
+    it("should return left if the either is left", () => {
       const error = new Error("some error");
       const either = left<Error, (num: number) => number>(error).ap(right(2));
       expect(either.toResult()).toEqual(left(error).toResult());
@@ -111,7 +111,7 @@ describe("either", () => {
   });
 
   describe("zip", () => {
-    it("should return an option of tuple on right value", () => {
+    it("should return an either of tuple on right value", () => {
       const either = right(2).zip(right("two"));
       expect(either.toResult()).toEqual(right([2, "two"]).toResult());
     });
@@ -144,7 +144,7 @@ describe("either", () => {
       expect(either.toResult()).toEqual(left(error).toResult());
     });
 
-    it("should return none when the inner either is none", () => {
+    it("should return left when the inner either is left", () => {
       const error = new Error("test error");
       const either = right(left(error)).flatten();
       expect(either.toResult()).toEqual(left(error).toResult());
@@ -167,17 +167,70 @@ describe("either", () => {
     });
   });
 
-  describe("getOrElse", () => {
-    const onLeft = (_: Error) => 0;
+  describe("tap", () => {
+    const sideEffect = vi.fn();
 
-    it("should return the right value", () => {
-      const value = right(2);
-      expect(value.getOrElse(onLeft)).toBe(2);
+    it("should run the side effect and return the same either on right value", () => {
+      const either = right(2);
+      const tapEither = either.tap(sideEffect);
+      expect(sideEffect).toBeCalledWith(2);
+      expect(tapEither).toBe(either);
     });
 
-    it("should map the left value", () => {
+    it("should not call the side effect and return the same either on left value", () => {
+      const either = left(new Error("test error"));
+      const tapEither = either.tap(sideEffect);
+      expect(sideEffect).not.toHaveBeenCalled();
+      expect(tapEither).toBe(either);
+    });
+  });
+
+  describe("match", () => {
+    it("should return the mapped right", () => {
+      const value = right(1).match(
+        () => 0,
+        (value) => value + 1
+      );
+      expect(value).toBe(2);
+    });
+
+    it("should return the mapped left", () => {
+      const value = left(new Error("test error")).match(
+        () => 0,
+        (value) => value + 1
+      );
+      expect(value).toBe(0);
+    });
+  });
+
+  describe("getOrElse", () => {
+    const fallback = () => 0;
+
+    it("should return right value", () => {
+      const value = right(2);
+      expect(value.getOrElse(fallback)).toBe(2);
+    });
+
+    it("should map the fallback value", () => {
       const value = left<Error, number>(new Error("test error"));
-      expect(value.getOrElse(onLeft)).toBe(0);
+      expect(value.getOrElse(fallback)).toBe(0);
+    });
+  });
+
+  describe("toResult", () => {
+    it("should return ok result with value on right", () => {
+      expect(right(2).toResult()).toEqual({
+        ok: true,
+        value: 2,
+      });
+    });
+
+    it("should return not ok result with error on left", () => {
+      const error = new Error("test error");
+      expect(left(error).toResult()).toEqual({
+        ok: false,
+        error,
+      });
     });
   });
 
@@ -194,8 +247,8 @@ describe("either", () => {
     "applicative laws",
     applicativeLawsSpec<Either<never, unknown>>({
       of: (value) => right(value),
-      ap: (opt, arg) =>
-        (opt as Either<never, (arg: unknown) => unknown>).ap(arg),
+      ap: (either, arg) =>
+        (either as Either<never, (arg: unknown) => unknown>).ap(arg),
       asTag: (e) => e.toResult(),
     })
   );
