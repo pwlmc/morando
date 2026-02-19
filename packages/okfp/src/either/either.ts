@@ -1,4 +1,4 @@
-import { EitherV, Left, Right } from "./defs.js";
+import { EitherV, Left, Right } from "./model.js";
 
 export type Result<E, T> = { ok: true; value: T } | { ok: false; error: E };
 
