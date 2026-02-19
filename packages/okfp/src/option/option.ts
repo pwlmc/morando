@@ -1,4 +1,4 @@
-import { OptionV, Some, NONE } from "./defs.js";
+import { OptionV, Some, NONE } from "./model.js";
 
 export type Option<T> = {
   /**

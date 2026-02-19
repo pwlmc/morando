@@ -57,7 +57,7 @@ describe("either helpers", () => {
         ],
       ]) {
         const [a, b, c] = eithers;
-        const d = map3(a!, b!, c!, (a, b, c) => a * b * c);
+        const d = map3(a!, b!, c!, mapper);
         expect(d.toResult()).toEqual(left(error).toResult());
         expect(mapper).not.toBeCalled();
       }

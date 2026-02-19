@@ -42,7 +42,7 @@ describe("option helpers", () => {
         [some(2), some(3), none<number>()],
       ]) {
         const [a, b, c] = opts;
-        const d = map3(a!, b!, c!, (a, b, c) => a * b * c);
+        const d = map3(a!, b!, c!, mapper);
         expect(d.toNullable()).toBe(null);
         expect(mapper).not.toBeCalled();
       }

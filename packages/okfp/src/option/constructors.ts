@@ -1,5 +1,5 @@
 import { type Either } from "../either.js";
-import { NONE } from "./defs.js";
+import { NONE } from "./model.js";
 import { Option, createOption } from "./option.js";
 
 /**
