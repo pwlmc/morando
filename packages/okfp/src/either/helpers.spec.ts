@@ -70,7 +70,7 @@ describe("either helpers", () => {
       expect(res.toResult()).toEqual(right([1, 2, 3]).toResult());
     });
 
-    it("should return left if one array items is left", () => {
+    it("should return left if one array item is left", () => {
       const error = new Error("test error");
       const res = sequence([
         right<number, Error>(1),
