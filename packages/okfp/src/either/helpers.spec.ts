@@ -65,7 +65,7 @@ describe("either helpers", () => {
   });
 
   describe("sequence", () => {
-    it("should return an option with the array of values when no left", () => {
+    it("should return a right with the array of values when no left", () => {
       const res = sequence([right(1), right(2), right(3)]);
       expect(res.toResult()).toEqual(right([1, 2, 3]).toResult());
     });
