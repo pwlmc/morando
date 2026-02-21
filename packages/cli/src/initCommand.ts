@@ -1,7 +1,7 @@
 import type { Template } from "./template/defs.js";
 import listTemplates from "./template/listTemplates.js";
 import chalk from "chalk";
-import { type Either, fromNullable } from "okfp/either";
+import { type Either, fromNullable } from "ok-fp/either";
 import { CONFIG_FILE_NAME } from "./config/defs.js";
 import { copyFileSync, existsSync } from "fs";
 import { resolveUserPath } from "./utils/fs.js";
@@ -45,7 +45,7 @@ export default function attachInitCommand(yargs: Argv) {
         .filterOrElse(
           (templates) =>
             list ? Boolean(templates.forEach(printTemplate)) : true,
-          () => ABORT_SIGNAL
+          () => ABORT_SIGNAL,
         )
         .flatMap((templates) =>
           fromNullable(
@@ -58,9 +58,9 @@ export default function attachInitCommand(yargs: Argv) {
                   "You can check the available list of templates with -l option.",
                 ]
                   .filter(Boolean)
-                  .join("\n")
-              ) as InitLeft
-          )
+                  .join("\n"),
+              ) as InitLeft,
+          ),
         )
         .filterOrElse(
           () => !existsSync(destPath) || force,
@@ -69,8 +69,8 @@ export default function attachInitCommand(yargs: Argv) {
               [
                 `Configuration file exists.`,
                 "Please specify -f / --force option to override.",
-              ].join("\n")
-            )
+              ].join("\n"),
+            ),
         )
         .tap((template) => copyFileSync(template.path, destPath))
         .match<Promise<never> | void>(
@@ -85,9 +85,9 @@ export default function attachInitCommand(yargs: Argv) {
           },
           () => {
             console.info(`Project initialized successfully at ${destPath}`);
-          }
+          },
         );
-    }
+    },
   );
 }
 

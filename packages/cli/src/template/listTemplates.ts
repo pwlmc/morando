@@ -1,10 +1,10 @@
 import { readdirSync } from "fs";
 import { normalize } from "path";
-import { fromNullable, type Option } from "okfp/option";
-import { type Either } from "okfp/either";
+import { fromNullable, type Option } from "ok-fp/option";
+import { type Either } from "ok-fp/either";
 import { type Template } from "./defs.js";
 import { pkgRootPath } from "../utils/fs.js";
-import { left, right } from "okfp/either";
+import { left, right } from "ok-fp/either";
 
 const TEMPLATES_DIR = pkgRootPath() + "/templates";
 
@@ -24,7 +24,7 @@ export const TEMPLATE_WHITELIST = {
  */
 export default function listTemplates(
   templatesDir: string = TEMPLATES_DIR,
-  templateWhitelist: Record<string, string> = TEMPLATE_WHITELIST
+  templateWhitelist: Record<string, string> = TEMPLATE_WHITELIST,
 ): Either<Error, Template[]> {
   const descriptions = Object.entries(templateWhitelist);
   return readTemplatesDir(templatesDir)
@@ -34,9 +34,9 @@ export default function listTemplates(
           parseTemplateFileName(filename).map((d) => ({
             ...d,
             path: normalize(templatesDir + "/" + filename),
-          }))
+          })),
         )
-        .flatMap((o) => o.toArray())
+        .flatMap((o) => o.toArray()),
     )
     .map((fdata) =>
       descriptions
@@ -49,12 +49,12 @@ export default function listTemplates(
                   description,
                   version,
                   path,
-                })
+                }),
               ) as Option<Template>,
             ]),
-          [] as Option<Template>[]
+          [] as Option<Template>[],
         )
-        .flatMap((o) => o.toArray())
+        .flatMap((o) => o.toArray()),
     );
 }
 

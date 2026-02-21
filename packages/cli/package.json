@@ -40,7 +40,7 @@
   "dependencies": {
     "ajv": "^6.12.6",
     "chalk": "^4.1.2",
-    "okfp": "^0.0.1",
+    "ok-fp": "^0.0.1",
     "yargs": "^18.0.0"
   },
   "devDependencies": {
