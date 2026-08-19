@@ -1,12 +1,12 @@
 <div class="hero">
   <h1 class="hero-title">Morando</h1>
-  <p class="hero-tagline">Architecture Linter For Front-End Applications</p>
+  <p class="hero-tagline">Architecture For Front-End Applications</p>
 </div>
 
 <style scoped>
 .hero {
   text-align: center;
-  padding: 2rem 0 7rem;
+  padding: 2rem 0 2rem;
 }
 .hero-title {
   font-size: 3rem;
@@ -22,27 +22,31 @@
 }
 </style>
 
-# Why Morando?
+Morando is a full front-end architecture framework built around two simple
+ideas: `Modules` and `Layers`.
 
-## Problem statement
+It comes with dedicated tooling and helps teams keep code healthier as systems
+grow by making architectural decisions explicit, measurable, and enforceable.
 
-Building large apps today still feels harder than it should be:
+## Why Morando?
 
-#### Layers alone don’t scale well
+Building front-end applications at scale is harder than it should be:
 
-Most scalable architecture attempts are rooted in a traditional layered model.
-While this approach introduces some structure, it tends to become rigid and
-cumbersome as applications grow. Layers force a hierarchical thinking that works
-well in small scopes but struggles to accommodate complex, evolving systems.
+#### Layers Alone Don’t Scale Well
 
-#### Frameworks leave you on your own
+Most architectures are rooted in a traditional layered model. While this
+approach introduces some structure, it tends to become rigid and cumbersome as
+applications grow. Layers force hierarchical thinking that works well in small
+scopes but struggles to accommodate complex, evolving systems.
+
+#### Frameworks Leave You on Your Own
 
 Frameworks like React, Vue, and others offer excellent building blocks for UIs,
 but they provide little to no support for organizing domain logic. Developers
 are left on their own to manage the growing complexity, often defaulting to
 ad-hoc solutions that vary wildly from one part of the system to another.
 
-#### Lack of common language, metrics, and tools
+#### Lack of Common Language, Metrics, and Tools
 
 Even when teams recognize architectural problems, they face a deeper challenge:
 the lack of a shared language for describing architectural decisions. There are
@@ -50,54 +54,54 @@ no simple metrics to evaluate whether a change improves or degrades the system�
 structure. Tooling support for architecture is minimal, leaving teams to
 navigate complexity without clear guidance or feedback.
 
-## The solution
+## The Morando Way
 
-To address these challenges, we need a different foundation. One that allows
-systems to grow without losing structure, and teams to collaborate without
+To address these challenges, we need a different foundation, one that allows
+systems to grow without losing structure and teams to collaborate without
 creating chaos.
 
-The key is to merge Layers with a **flexible Module abstraction**. Modules
+The core idea is to merge `Layers` with a flexible `Module` abstraction. Modules
 provide a natural way to express boundaries, manage complexity recursively, and
 evolve the system without unnecessary coupling.
 
-With merging **Layers** and **Modules**, Morando architecture offers:
+By merging `Layers` and `Modules`, Morando architecture offers:
 
-- A **clear vocabulary** for discussing system design.
-- An intuitive way to **measure and improve** architectural decisions.
-- A **tooling** that support and enforce good practices all the time.
+- A clear vocabulary for discussing system design.
+- An intuitive way to measure and improve architectural decisions.
+- Tooling that supports and enforces good practices continuously.
 
 ## Morando Design Principles
 
 #### 1. Minimum Overhead
 
-Strive to minimize the entry barrier for developers. The architecture avoids
-introducing unnecessary files or classes that consumers must create or extend,
-ensuring a lightweight and intuitive experience.
+Strive to minimize the entry barrier for developers. Morando avoids introducing
+unnecessary files or classes that consumers must create or extend, ensuring a
+lightweight and intuitive experience.
 
 #### 2. Convention Over Definition
 
-Morando architecture emphasizes conventions and code inspection over rigid
+The architecture emphasizes conventions and code inspection over rigid
 definitions. By relying on inspecting the code and enforcing rules dynamically,
 we reduce the need for predefined templates, fostering flexibility and
 simplicity.
 
-#### 3. Natural Codebase Evolution
+#### 3. Enable Codebase Evolution
 
-The architecture supports rapid code creation while encouraging good practices.
-It allows for easy refactoring and correction of mistakes with minimal
-disruption, enabling the codebase to evolve naturally over time.
+Morando supports rapid code creation while encouraging good practices. It allows
+for easy refactoring and correction of mistakes with minimal disruption,
+enabling the codebase to evolve naturally over time.
 
-#### 4. Maximized Testability
+#### 4. Maximize Testability
 
-Testing is a cornerstone of quality. The architecture promotes splitting code
-into smaller, testable units, making it easier to write and maintain robust unit
+Testing is a cornerstone of quality. Morando promotes splitting code into
+smaller, testable units, making it easier to write and maintain robust unit
 tests, even for challenging front-end scenarios.
 
-#### 5. Metric Driven
+#### 5. Metric-Driven
 
-To ensure adherence to architectural rules, the architecture facilitates the
-addition of fitness functions. These functions validate the correctness of the
-codebase, ensuring it aligns with the intended design principles.
+To ensure adherence to architectural rules, Morando supports adding fitness
+functions. These functions validate the correctness of the codebase, ensuring it
+aligns with the intended design principles.
 
 #### 6. Limited Nesting
 
@@ -108,9 +112,8 @@ efficient code organization without compromising long-term usability.
 #### 7. Clear Ownership
 
 In large projects, clear ownership of code is essential for velocity and
-maintenance. The architecture defines entities that make it straightforward to
-assign and determine ownership, streamlining collaboration and accountability.
+maintenance. Morando defines entities that make it straightforward to assign and
+determine ownership, streamlining collaboration and accountability.
 
-By adhering to these principles, the React Modular Architecture aims to provide
-a robust framework that empowers developers to build scalable and maintainable
-applications with ease.
+By adhering to these principles, Morando provides a robust architecture that
+empowers developers to build scalable and maintainable applications with ease.
