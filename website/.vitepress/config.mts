@@ -16,6 +16,10 @@ export default defineConfig({
         text: "Modules",
         link: "/modules",
       },
+      {
+        text: "Domains",
+        link: "/domains",
+      },
     ],
     socialLinks: [{ icon: "github", link: "https://github.com/pwlmc/morando" }],
   },

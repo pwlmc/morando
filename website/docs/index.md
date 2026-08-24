@@ -22,11 +22,11 @@
 }
 </style>
 
-Morando is a full front-end architecture framework built around two simple
-ideas: `Modules` and `Layers`.
+Morando blends Modules and Layers into a front-end architecture that scales with
+your application.
 
-It comes with dedicated tooling and helps teams keep code healthier as systems
-grow by making architectural decisions explicit, measurable, and enforceable.
+Together with its dedicated tooling, it helps teams keep codebases healthy by
+making architectural decisions explicit, measurable, and enforceable.
 
 ## Why Morando?
 
