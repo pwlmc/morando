@@ -15,19 +15,20 @@ contain source code files. Below you can find an example of a `User` module:
 
 ```text
 User/
-├── api.ts
-├── model.ts
 ├── UserAvatar.tsx
-└── useUser.ts
+├── useUser.ts
+├── api.ts
+└── model.ts
 ```
 
 ## Modules Are Flat
 
-One module folder can't be placed inside another module folder. That said,
-modules can contain folders. They cannot be just any folders, and their names
-are strictly tied to the layers defined in your project. They are _layer
-folders_, and to make them easier to tell apart from modules, their names start
-with a lowercase letter.
+One module folder can't be placed inside another module folder.
+
+That said, modules can contain folders. They cannot be just any folders, and
+their names are strictly tied to the layers defined in your project. They are
+_layer folders_, and to make them easier to tell apart from modules, their names
+start with a lowercase letter.
 
 We will cover them in the [Layers](./layers.md) chapter, but for this chapter,
 it is enough to remember that they are optional. Like modules, layer folders
@@ -38,12 +39,12 @@ layer folders.
 
 ```text
 Shared/
-├── utils/
-│   ├── getId.ts
-│   └── getName.ts
-└── components/
-    ├── FilterButton.tsx
-    └── ProductIcon.tsx
+├── components/
+│   ├── FilterButton.tsx
+│   └── ProductIcon.tsx
+└── utils/
+    ├── getId.ts
+    └── getName.ts
 ```
 
 ## Module Dependencies
