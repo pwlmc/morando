@@ -15,10 +15,10 @@ contain source code files. Below you can find an example of a `User` module:
 
 ```text
 User/
-├── UserAvatar.tsx
-├── useUser.ts
+├── model.ts
 ├── api.ts
-└── model.ts
+├── useUser.ts
+└── UserAvatar.tsx
 ```
 
 ## Modules Are Flat
@@ -30,9 +30,9 @@ their names are strictly tied to the layers defined in your project. They are
 _layer folders_, and to make them easier to tell apart from modules, their names
 start with a lowercase letter.
 
-We will cover them in the [Layers](./layers.md) chapter, but for this chapter,
-it is enough to remember that they are optional. Like modules, layer folders
-also cannot be nested.
+We will cover them in the [Layers](./layers.md#files-are-classified-to-layers)
+chapter, but for this chapter, it is enough to remember that they are optional.
+Like modules, layer folders also cannot be nested.
 
 Below is an example of a `Shared` module that contains `utils` and `components`
 layer folders.
