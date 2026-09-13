@@ -20,6 +20,14 @@ export default defineConfig({
         text: "Domains",
         link: "/domains",
       },
+      {
+        text: "Layers",
+        link: "/layers",
+      },
+      {
+        text: "Layer Groups",
+        link: "/layer-groups",
+      },
     ],
     socialLinks: [{ icon: "github", link: "https://github.com/pwlmc/morando" }],
   },
