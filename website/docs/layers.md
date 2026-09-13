@@ -1,3 +1,11 @@
+---
+title: Layers
+description:
+  Layers express the technical shape of a Morando application. Learn how layers
+  differ from modules, how they are defined, and how dependencies between them
+  are enforced.
+---
+
 # Layers
 
 ## Modules vs. Layers

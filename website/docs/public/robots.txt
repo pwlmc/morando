@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+
+Disallow: /templates/
+
+Sitemap: https://www.morando.dev/sitemap.xml

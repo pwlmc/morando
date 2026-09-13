@@ -1,3 +1,11 @@
+---
+title: Layer Groups
+description:
+  Every Morando layer belongs to one of four abstraction levels, Definitions,
+  Operations, Presentation, and Bootstrap. Learn the default layers and how
+  groups constrain dependencies.
+---
+
 # Layer Groups
 
 ## Layers Belong to Groups

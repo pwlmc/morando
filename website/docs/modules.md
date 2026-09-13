@@ -1,3 +1,11 @@
+---
+title: Modules
+description:
+  A Morando module is a vertical slice of the application, a folder that
+  encapsulates one well-defined concern across every layer. Learn the structure,
+  naming rules, and import boundaries.
+---
+
 # Modules
 
 ## What Is a Module?

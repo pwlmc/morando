@@ -1,3 +1,11 @@
+---
+title: Domains
+description:
+  A Morando domain groups related modules under a shared business area. Learn
+  where domains live, how they are named, and the rules that govern what they
+  may contain.
+---
+
 # Domains
 
 ## What Is a Domain?

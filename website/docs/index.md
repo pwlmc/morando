@@ -1,3 +1,12 @@
+---
+title: "Morando: Architecture For Front-End Applications"
+titleTemplate: false
+description:
+  Morando blends modules and layers into a front-end architecture that scales
+  with your application, with a CLI linter that makes architectural decisions
+  explicit, measurable, and enforceable.
+---
+
 <div class="hero">
   <h1 class="hero-title">Morando</h1>
   <p class="hero-tagline">Architecture For Front-End Applications</p>
