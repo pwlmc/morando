@@ -2,7 +2,11 @@
 
 ![license](https://img.shields.io/badge/license-MIT-blue)
 
-> Architecture Linter For Front-End Applications
+> Front-End Architecture
+
+Morando blends Modules and Layers into a front-end architecture that scales with your application.
+
+Together with its dedicated tooling, it helps teams keep codebases healthy by making architectural decisions explicit, measurable, and enforceable.
 
 ## Documentation
 

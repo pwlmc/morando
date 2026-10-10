@@ -37,9 +37,9 @@ layer, the more implementation-specific and less abstract it becomes.
 
 For each project, the list of layers needs to be defined upfront because without
 it we can't validate the project's architecture. More details on what a concrete
-list of layers might look like will be discussed in the
-[Layer groups](./layer-groups.md) chapter. For now, it is enough to assume that
-layers are an ordered list of names defined for a Morando project.
+list of layers might look like will be discussed in the [Stacks](./stacks.md)
+chapter. For now, it is enough to assume that layers are an ordered list of
+names defined for a Morando project.
 
 ## Files Are Classified to Layers
 

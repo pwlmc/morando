@@ -85,8 +85,8 @@ export default defineConfig({
         link: "/layers",
       },
       {
-        text: "Layer Groups",
-        link: "/layer-groups",
+        text: "Stacks",
+        link: "/stacks",
       },
     ],
     socialLinks: [{ icon: "github", link: "https://github.com/pwlmc/morando" }],
