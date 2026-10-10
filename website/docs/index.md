@@ -9,7 +9,7 @@ description:
 
 <div class="hero">
   <h1 class="hero-title">Morando</h1>
-  <p class="hero-tagline">Architecture For Front-End Applications</p>
+  <p class="hero-tagline">Front-End Architecture</p>
 </div>
 
 <style scoped>
