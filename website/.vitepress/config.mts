@@ -88,6 +88,10 @@ export default defineConfig({
         text: "Stacks",
         link: "/stacks",
       },
+      {
+        text: "Validation",
+        link: "/validation",
+      },
     ],
     socialLinks: [{ icon: "github", link: "https://github.com/pwlmc/morando" }],
   },

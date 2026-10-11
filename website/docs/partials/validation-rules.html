@@ -1,0 +1,73 @@
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>Required</th>
+      <th>Forbidden</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>File</th>
+      <td>
+        <ul>
+          <li>Belongs to a module.</li>
+          <li>Is classified into a layer.</li>
+        </ul>
+      </td>
+      <td>
+        <ul>
+          <li>Depends on a file in a higher layer.</li>
+          <li>Has a circular dependency with another file.</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <th>Module</th>
+      <td>
+        <ul>
+          <li>Belongs to a domain.</li>
+        </ul>
+      </td>
+      <td>
+        <ul>
+          <li>Contains folders other than layer folders.</li>
+          <li>Has a circular dependency with another module.</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <th>Domain</th>
+      <td>
+        <ul>
+          <li>Is located in the project's source root.</li>
+          <li>Contains only modules.</li>
+        </ul>
+      </td>
+      <td>--</td>
+    </tr>
+    <tr>
+      <th>Layer</th>
+      <td>
+        <ul>
+          <li>Is assigned to a stack.</li>
+        </ul>
+      </td>
+      <td>--</td>
+    </tr>
+    <tr>
+      <th>Layer folder</th>
+      <td>
+        <ul>
+          <li>Belongs to a module.</li>
+          <li>Has a name that matches one of the project's layers.</li>
+        </ul>
+      </td>
+      <td>
+        <ul>
+          <li>Contains folders.</li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
