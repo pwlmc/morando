@@ -69,28 +69,42 @@ export default defineConfig({
   themeConfig: {
     sidebar: [
       {
-        text: "What is Morando?",
-        link: "/",
+        text: "Introduction",
+        items: [
+          {
+            text: "What is Morando?",
+            link: "/",
+          },
+          {
+            text: "Getting started",
+            link: "/getting-started",
+          },
+        ],
       },
       {
-        text: "Modules",
-        link: "/modules",
-      },
-      {
-        text: "Domains",
-        link: "/domains",
-      },
-      {
-        text: "Layers",
-        link: "/layers",
-      },
-      {
-        text: "Stacks",
-        link: "/stacks",
-      },
-      {
-        text: "Validation",
-        link: "/validation",
+        text: "Reference",
+        items: [
+          {
+            text: "Modules",
+            link: "/modules",
+          },
+          {
+            text: "Domains",
+            link: "/domains",
+          },
+          {
+            text: "Layers",
+            link: "/layers",
+          },
+          {
+            text: "Stacks",
+            link: "/stacks",
+          },
+          {
+            text: "Validation",
+            link: "/validation",
+          },
+        ],
       },
     ],
     socialLinks: [{ icon: "github", link: "https://github.com/pwlmc/morando" }],
