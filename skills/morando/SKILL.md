@@ -11,6 +11,7 @@ Use the Morando docs as the authority for validation, and the project's configur
 
 - **Structure:** `@/Domain/Module/file` (`@/` means the source root, not necessarily a configured import alias). Domains sit directly under the source root and contain only modules. Files belong directly inside modules. Modules cannot contain subfolders. Capitalize domain and module names by convention.
 - **Classification:** Every validated file must classify into a configured layer. Layers are ordered classifications, not path segments. Use the project's classifier and naming conventions; do not infer the layer from a module name or the presence of a private helper. Each layer belongs to a stack, and each stack needs at least one layer. From lowest to highest, the stacks and their default layers are Definitions (`defs`), Operations (`ops`), Presentation (`ui`), and Bootstrap (`main`). Projects can use different layer names and multiple layers per stack.
+- **React defaults:** From lowest to highest: `defs`, `ops`, `hooks`, `components`, `pages`, `main`. `hooks` belongs to Operations; `components` and `pages` belong to Presentation. Use the project's configured order if it differs.
 - **Layer golden rule:** A file may depend only on files in the same or a lower layer. This applies both within and across modules. Compare the actual configured layer ranks, not just the stacks.
 - **File cycles:** The file dependency graph must be acyclic. Even same-layer imports cannot form a direct or transitive cycle.
 - **Module golden rule:** An import from any file in module A to any file in module B makes A depend on B. B must not depend back on A, directly or transitively. The module graph must be a DAG independently of the file graph; imports between different pairs of files can form a module cycle without a file cycle.
@@ -25,6 +26,7 @@ Use the Morando docs as the authority for validation, and the project's configur
 - **Name modules for what they own.** Avoid names that repeat configured layers, such as `Components` for a `components` layer. Such names are valid but obscure the module's model.
 - **Keep platform independent of product.** Product modules can use platform modules, such as those under `DesignSystem`. Platform modules must not depend on product modules, directly or transitively. Keep product-specific wiring on the product side.
 - **Never use index barrels.** Import directly from the file that defines the symbol. Do not add or route imports through an `index.*` re-export barrel. An executable entry point named `index.*` is not a barrel.
+- **Import paths follow module boundaries.** Use relative imports within the same module. Use absolute imports across modules, even within the same domain. Use the configured source root alias when one exists.
 
 ## Workflow for a change
 
