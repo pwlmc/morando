@@ -28,9 +28,8 @@ consistent.
 ## Domains Contain Modules
 
 Each module must be placed inside a domain. In other words, modules are never
-top-level folders on their own. Consequently, domains can contain only modules;
-files or layer folders cannot be placed directly inside a domain folder. Below
-is an example structure:
+top-level folders on their own. Domains contain only modules, so files cannot
+sit directly inside a domain folder. For example:
 
 ```text
 .

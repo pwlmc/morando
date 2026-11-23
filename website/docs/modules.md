@@ -31,29 +31,8 @@ User/
 
 ## Modules Are Flat
 
-One module folder can't be placed inside another module folder.
-
-That said, modules can contain folders. They cannot be just any folders, and
-their names are strictly tied to the layers defined in your project. They are
-_layer folders_, and to make them easier to tell apart from modules, their names
-start with a lowercase letter.
-
-We will cover them in the [Layers](./layers.md#files-are-classified-to-layers)
-chapter, but for this chapter, it is enough to remember that they are optional.
-Like modules, layer folders also cannot be nested.
-
-Below is an example of a `Shared` module that contains `utils` and `components`
-layer folders.
-
-```text
-Shared/
-├── components/
-│   ├── FilterButton.tsx
-│   └── ProductIcon.tsx
-└── utils/
-    ├── getId.ts
-    └── getName.ts
-```
+A module contains source files directly and cannot contain subfolders. A file
+in a module has the path `@/Domain/Module/file`.
 
 ## Module Dependencies
 
