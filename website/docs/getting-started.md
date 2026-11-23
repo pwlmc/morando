@@ -1,12 +1,34 @@
 ---
 title: Getting started
 description:
-  Morando is an architecture toolkit for front-end projects, including an
-  architecture linter. The project is under development, with an alpha planned
-  for 2027.
+  Install the Morando skill for your coding agent and learn about the
+  architecture linter.
 ---
 
-# Morando linter is under development
+# Getting started
+
+## Use Morando with a coding agent
+
+Install the
+[Morando skill](https://github.com/pwlmc/morando/tree/main/skills/morando):
+
+::: code-group
+
+```sh [Skills]
+npx skills add pwlmc/morando --skill morando
+```
+
+```sh [GitHub CLI]
+gh skill install pwlmc/morando morando
+```
+
+:::
+
+Ask your agent to use the Morando skill when adding a feature, moving files, or
+reviewing imports. For example: “Use the Morando skill to add checkout
+validation and link to the rules behind your placement and import choices.”
+
+## Morando linter is under development
 
 Morando is an architecture toolkit for front-end applications. It will include a
 linter that helps teams define and enforce architectural rules across their
