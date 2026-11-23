@@ -27,6 +27,8 @@ Use the Morando docs as the authority for validation, and the project's configur
 - **Keep platform independent of product.** Product modules can use platform modules, such as those under `DesignSystem`. Platform modules must not depend on product modules, directly or transitively. Keep product-specific wiring on the product side.
 - **Never use index barrels.** Import directly from the file that defines the symbol. Do not add or route imports through an `index.*` re-export barrel. An executable entry point named `index.*` is not a barrel.
 - **Import paths follow module boundaries.** Use relative imports within the same module. Use absolute imports across modules, even within the same domain. Use the configured source root alias when one exists.
+- **Resolve files found directly under a domain.** Domains contain only module folders. Move each misplaced file into an existing module that owns its concern, or create a cohesive new module if one fits. If neither fits, use `Shared`, the reserved name for a domain's general-purpose module. Reuse an existing `Shared`; if the domain already has a general-purpose module under another name, rename it to `Shared` and update its imports rather than creating a second one. Create `Shared` only as a last resort.
+- **Revisit `Shared` as the domain evolves.** Prefer domains without `Shared`, but accept it when files have no better home. Treat its files as refactoring candidates. When adding or refactoring files in the domain, consider moving related files out of `Shared` if they fit an existing module or form a cohesive new one.
 
 ## Workflow for a change
 
