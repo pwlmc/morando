@@ -34,6 +34,7 @@ Use the Morando docs as the authority for validation, and the project's configur
 2. Choose the file based on ownership and actual consumers. Keep private code local. Check the classifier before adding or renaming a file.
 3. Trace new or redirected imports. Check layer direction per file and cycles separately in both the file and module graphs. Check platform independence and the stability impact on affected modules.
 4. Run the project's Morando check if available, then the targeted behavioral check. If there is no Morando check or it does not cover a rule, inspect the affected imports against that rule and report the verification limit.
+5. When explaining a recommendation, link to the specific Morando documentation page or section that supports it. If the recommendation comes from this skill rather than the docs, label it as design guidance. Link related docs for context without implying they prescribe it.
 
 ## References
 
