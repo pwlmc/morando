@@ -17,7 +17,7 @@ Every project that uses Morando architecture will inevitably contain different
 modules. That is expected, because modules express the application's business
 domain. You cannot expect an online banking app to have the exact same set of
 modules as, for example, a hotel-booking app. Some modules may be similar, for
-instance, both may include a `@/Routing` module, but the core business modules
+instance, both may include a `@/App/Routing` module, but the core business modules
 will still diverge.
 
 Layers are different. In all Morando applications, you will find some universal
@@ -51,26 +51,6 @@ location in the project, file name, extension, and so on. For example, in a
 React project that defines a `components` layer, a `Button.tsx` file may be
 classified to that layer because it starts with an uppercase letter and has a
 `tsx` extension.
-
-The classifier's algorithm is an implementation detail specific to the concrete
-list of layers, and we will not discuss it here. That said, there is one
-universal classifier for all Morando projects, already mentioned in the
-[Modules](./modules.md#modules-are-flat) chapter.
-
-Layer folders are special folders named exactly as the layer. They are optional
-folders that can be placed inside a module and act as classifiers for all files
-inside them. For example, in the case of the following hypothetical module:
-
-```text
-Shared/
-└── components/
-    ├── foo.ts
-    └── bar.ts
-```
-
-`foo.ts` and `bar.ts` would be classified to the `components` layer. Of course,
-that assumes the project defines the `components` layer; otherwise, the
-`components/` folder would not be a valid layer folder.
 
 ## The Golden Rule of Layers
 
