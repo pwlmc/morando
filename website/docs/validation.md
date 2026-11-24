@@ -13,7 +13,7 @@ description:
 Before validating a project, Morando builds its dependency graph. Traversal
 starts from the project's entry point, usually the file configured as your
 application bundler's entry point (`src/index.ts` or `src/index.tsx`), and
-continues until all project files have been analyzed.
+follows imports between source files.
 
 Each traversed file is analyzed to determine whether it violates any validation
 rules. The main factors are:
@@ -25,6 +25,13 @@ rules. The main factors are:
 During this process, the file is also classified into a layer. Traversal then
 continues to each dependency unless it is `excluded`, as discussed in the next
 section.
+
+A module subfolder may contain only
+[static assets](./modules.md#module-structure). Asset references are not edges
+in the source dependency graph. Assets do not need `excluded` or `legacy`
+entries; those settings are not what makes an asset subfolder valid. Source
+files may import static assets from their own module. Directly importing static
+assets from another module is forbidden.
 
 :::tip Morando does not analyze your code  
 By design, Morando does not analyze your code's semantics. It only extracts

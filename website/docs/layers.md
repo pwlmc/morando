@@ -43,7 +43,9 @@ names defined for a Morando project.
 
 ## Files Are Classified to Layers
 
-In Morando architecture, every file must be classified to a layer.
+In Morando architecture, every source file subject to validation must be
+classified into a layer. [Static assets](./modules.md#module-structure)
+do not have layers.
 
 A file is assigned to a layer by a classifier function. Because Morando never
 parses a file's code, the classifier usually tries to assign a file based on its

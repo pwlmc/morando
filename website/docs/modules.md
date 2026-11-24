@@ -29,16 +29,33 @@ User/
 └── UserAvatar.tsx
 ```
 
-## Modules Are Flat
+## Module Structure
 
-A module contains source files directly and cannot contain subfolders. A file
-in a module has the path `@/Domain/Module/file`.
+Source files belong directly in the module folder at `@/Domain/Module/file`. The
+only subfolders allowed inside a module are for static assets such as SVG icons,
+images, and fonts. Source files cannot be placed in those subfolders, even if no
+source file imports them.
+
+Use a name that describes the assets. For example, `@/DesignSystem/Icon` can
+keep its source files visible and group its SVGs under `icons/`:
+
+```text
+Icon/
+├── Icon.tsx
+└── icons/
+    ├── close.svg
+    └── search.svg
+```
+
+Static assets belong to their module but do not have layers. Keep asset
+references within the owning module. Other modules should use its source files,
+such as `Icon.tsx`, rather than reaching into its assets directly.
 
 ## Module Dependencies
 
 While modules can't be nested, they can depend on each other. We say that
-`Module A` depends on `Module B` if any file from `Module A` imports any file
-from `Module B`.
+`Module A` depends on `Module B` if any source file from `Module A` imports a
+source file from `Module B`.
 
 Analyzing dependencies between modules can reveal a lot about the overall
 condition of a project. A project's architecture is considered valid when no two
